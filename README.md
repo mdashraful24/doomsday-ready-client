@@ -22,9 +22,14 @@ Built with Vite, React, TypeScript, Tailwind CSS, and React Router.
 
 - Pick a cinema and enter a group size.
 - See the exact bundles to buy or an explicit “Not possible” result.
-- Confirm bookings, then cancel or delete them from the bookings list.
+- Confirm bookings and jump to the booking list from a dedicated button.
 - Delete cinemas with a confirmation step.
 - See remaining rewatch time for the selected target movie.
+
+## Booking List View (`/booking/list`)
+
+- Review confirmed and cancelled bookings.
+- Cancel or delete bookings with a confirmation step.
 
 ## Run Locally
 

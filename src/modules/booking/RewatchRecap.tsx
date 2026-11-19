@@ -1,7 +1,7 @@
 import { EmptyState } from "../../components/EmptyState";
 import { ClockIcon } from "../../components/Icons";
 import { SectionCard } from "../../components/SectionCard";
-import { Skeleton, SkeletonStats } from "../../components/Skeleton";
+import { Skeleton, SkeletonStats } from "../../components/skeletons";
 import type { RewatchSummary } from "./types";
 import { statLabelClass } from "../../ui";
 import { formatRuntime } from "../../utils";
@@ -21,12 +21,12 @@ export const RewatchRecap = ({ summary, loading }: RewatchRecapProps) => (
 		{loading ? (
 			<div className="grid gap-3" role="status" aria-label="Loading recap">
 				<span className="sr-only">Loading rewatch recap...</span>
-				<Skeleton className="h-32 w-full rounded-2xl" />
+				<Skeleton className="h-28 w-full rounded-2xl" />
 				<SkeletonStats cards={2} />
 			</div>
 		) : summary ? (
 			<div className="grid gap-3">
-				<div className="relative overflow-hidden rounded-2xl border border-indigo-300/20 bg-gradient-to-br from-indigo-500/15 to-fuchsia-500/5 p-5">
+				<div className="relative overflow-hidden rounded-2xl border border-indigo-300/20 bg-linear-to-br from-indigo-500/15 to-fuchsia-500/5 p-5">
 					<div
 						className="pointer-events-none absolute -top-16 -right-12 size-44 rounded-full bg-indigo-400/10 blur-3xl"
 						aria-hidden="true"

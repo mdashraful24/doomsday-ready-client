@@ -2,7 +2,7 @@ import { EmptyState } from "../../components/EmptyState";
 import { CheckIcon, TicketIcon, TrashIcon } from "../../components/Icons";
 import { Pagination } from "../../components/Pagination";
 import { SectionCard } from "../../components/SectionCard";
-import { SkeletonList } from "../../components/Skeleton";
+import { SkeletonList } from "../../components/skeletons";
 import { usePagination } from "../../hooks/usePagination";
 import type { Booking } from "../../types";
 import {

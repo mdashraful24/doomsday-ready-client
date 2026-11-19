@@ -1,27 +1,37 @@
 import type { ReactNode } from "react";
 import {
+	Link,
 	Navigate,
 	NavLink,
 	Route,
 	Routes,
 	useLocation,
 } from "react-router-dom";
-import { FilmIcon, RouteIcon, SparkIcon, TicketIcon } from "./components/Icons";
+import {
+	ArrowRightIcon,
+	FilmIcon,
+	RouteIcon,
+	SparkIcon,
+	TicketIcon,
+} from "./components/Icons";
 import { Toaster } from "./components/Toaster";
 import BookingPage from "./pages/BookingPage";
+import BookingsPage from "./pages/BookingsPage";
 import MoviesPage from "./pages/MoviesPage";
 import RewatchPlanPage from "./pages/RewatchPlanPage";
 import { ConfirmProvider } from "./providers/ConfirmProvider";
+import { secondaryButtonClass } from "./ui";
 
-type NavigationItem = {
+type RouteItem = {
 	to: string;
 	label: string;
-	icon: ReactNode;
+	icon?: ReactNode;
 	title: string;
 	description: string;
+	showInNav?: boolean;
 };
 
-const navigation: NavigationItem[] = [
+const routes: RouteItem[] = [
 	{
 		to: "/movies",
 		label: "Movies",
@@ -46,7 +56,17 @@ const navigation: NavigationItem[] = [
 		description:
 			"Turn your group size into the fewest exact bundles, or know instantly when it is not possible.",
 	},
+	{
+		to: "/booking/list",
+		label: "Booking list",
+		title: "Booking list",
+		description:
+			"Review, cancel, or delete confirmed opening-night bookings from one place.",
+		showInNav: false,
+	},
 ];
+
+const navigation = routes.filter((item) => item.showInNav !== false);
 
 const tabClass =
 	"inline-flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition duration-200";
@@ -54,21 +74,21 @@ const tabClass =
 const AppShell = () => {
 	const location = useLocation();
 	const active =
-		navigation.find((item) => item.to === location.pathname) ?? navigation[0];
+		routes.find((item) => item.to === location.pathname) ?? routes[0];
 
 	return (
-		<div className="relative min-h-screen overflow-hidden bg-[#070b18] text-slate-100">
+		<div className="relative min-h-screen overflow-x-clip bg-[#070b18] text-slate-100">
 			<div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-				<div className="animate-float-slow absolute -top-44 -left-40 size-[34rem] rounded-full bg-indigo-500/20 blur-[130px]" />
-				<div className="absolute top-1/3 -right-48 size-[32rem] rounded-full bg-fuchsia-500/10 blur-[130px]" />
-				<div className="absolute -bottom-52 left-1/3 size-[32rem] rounded-full bg-amber-400/10 blur-[130px]" />
+				<div className="animate-float-slow absolute -top-44 -left-40 size-136 rounded-full bg-indigo-500/20 blur-[130px]" />
+				<div className="absolute top-1/3 -right-48 size-128 rounded-full bg-fuchsia-500/10 blur-[130px]" />
+				<div className="absolute -bottom-52 left-1/3 size-128 rounded-full bg-amber-400/10 blur-[130px]" />
 				<div className="texture-grid absolute inset-0" aria-hidden="true" />
 			</div>
 
 			<header className="sticky top-0 z-20 border-b border-white/5 bg-slate-950/60 backdrop-blur-xl">
 				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
 					<div className="flex items-center gap-3">
-						<div className="grid size-10 place-items-center rounded-2xl bg-gradient-to-br from-indigo-400 via-violet-500 to-fuchsia-500 text-slate-950 shadow-lg shadow-indigo-500/25">
+						<div className="grid size-10 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-500 to-fuchsia-500 text-slate-950 shadow-lg shadow-indigo-500/25">
 							<FilmIcon className="size-5" />
 						</div>
 						<div>
@@ -82,7 +102,7 @@ const AppShell = () => {
 					</div>
 
 					<nav
-						className="flex flex-wrap items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5"
+						className="w-full md:w-fit flex flex-wrap items-center justify-between gap-1 rounded-2xl border border-white/10 bg-white/3 p-1.5"
 						aria-label="Views"
 					>
 						{navigation.map((item) => (
@@ -106,7 +126,7 @@ const AppShell = () => {
 			</header>
 
 			<section className="mx-auto max-w-7xl px-4 pb-8 pt-9 sm:px-6 lg:px-8">
-				<div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/90 via-indigo-950/50 to-slate-950/80 p-6 shadow-[0_30px_100px_-45px_rgba(99,102,241,0.65)] sm:p-8">
+				<div className="relative overflow-hidden rounded-4xl border border-white/10 bg-linear-to-br from-slate-900/90 via-indigo-950/50 to-slate-950/80 p-6 shadow-[0_30px_100px_-45px_rgba(99,102,241,0.65)] sm:p-8">
 					<div
 						className="pointer-events-none absolute inset-0"
 						aria-hidden="true"
@@ -145,6 +165,17 @@ const AppShell = () => {
 								</p>
 							</div>
 						</div>
+
+						{/* Medium and Small screen only */}
+						<div className="block lg:hidden">
+							<Link
+								to="/booking/list"
+								className={`${secondaryButtonClass} justify-center w-full`}
+							>
+								View booking list
+								<ArrowRightIcon className="size-4" />
+							</Link>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -155,6 +186,7 @@ const AppShell = () => {
 					<Route path="/movies" element={<MoviesPage />} />
 					<Route path="/rewatch" element={<RewatchPlanPage />} />
 					<Route path="/booking" element={<BookingPage />} />
+					<Route path="/booking/list" element={<BookingsPage />} />
 					<Route path="*" element={<Navigate to="/movies" replace />} />
 				</Routes>
 			</main>

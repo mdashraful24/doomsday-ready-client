@@ -14,14 +14,16 @@ const RewatchPlanView = () => {
 	} = useRewatchPlan();
 
 	return (
-		<div className="grid gap-6 xl:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.2fr)]">
-			<RewatchTargetPanel
-				movies={movies}
-				selectedId={selectedId}
-				order={order}
-				loading={loading}
-				onSelect={selectTarget}
-			/>
+		<div className="grid items-start gap-6 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.2fr)]">
+			<div className="lg:sticky lg:top-24 lg:z-10 lg:self-start">
+				<RewatchTargetPanel
+					movies={movies}
+					selectedId={selectedId}
+					order={order}
+					loading={loading}
+					onSelect={selectTarget}
+				/>
+			</div>
 			<RewatchTimeline
 				order={order}
 				loading={loading}

@@ -71,9 +71,17 @@ export const useBooking = () => {
 		setQuote(null);
 
 		try {
-			setQuote(
-				await cinemasApi.getBookingQuote(selectedCinemaId, Number(groupSize)),
+			const result = await cinemasApi.getBookingQuote(
+				selectedCinemaId,
+				Number(groupSize),
 			);
+
+			setQuote(result);
+			requestAnimationFrame(() => {
+				document
+					.getElementById("booking-form-card")
+					?.scrollIntoView({ behavior: "smooth", block: "start" });
+			});
 		} catch (error) {
 			toast.error("Could not calculate bundles", {
 				description: getErrorMessage(error),

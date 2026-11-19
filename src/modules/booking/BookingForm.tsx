@@ -2,7 +2,7 @@ import { Field } from "../../components/Field";
 import { ArrowRightIcon, TicketIcon } from "../../components/Icons";
 import { Select } from "../../components/Select";
 import { SectionCard } from "../../components/SectionCard";
-import { Skeleton } from "../../components/Skeleton";
+import { Skeleton } from "../../components/skeletons";
 import type { BookingQuote, Cinema } from "../../types";
 import {
 	chipClass,

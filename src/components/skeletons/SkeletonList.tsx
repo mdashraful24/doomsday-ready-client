@@ -1,13 +1,6 @@
 import { useMemo } from "react";
-import { rowClass, skeletonClass } from "../ui";
-
-type SkeletonProps = {
-	className?: string;
-};
-
-export const Skeleton = ({ className = "" }: SkeletonProps) => (
-	<div className={`${skeletonClass} ${className}`} aria-hidden="true" />
-);
+import { rowClass } from "../../ui";
+import { Skeleton } from "./Skeleton";
 
 type SkeletonListProps = {
 	rows?: number;
@@ -43,32 +36,6 @@ export const SkeletonList = ({
 						<Skeleton className="h-8 w-20 shrink-0" />
 					</div>
 					<Skeleton className="mt-4 h-14 w-full" />
-				</div>
-			))}
-		</div>
-	);
-};
-
-export const SkeletonStats = ({ cards = 3 }: { cards?: number }) => {
-	const keys = useMemo(
-		() => Array.from({ length: cards }, () => crypto.randomUUID()),
-		[cards],
-	);
-
-	return (
-		<div
-			className="grid gap-3 sm:grid-cols-3"
-			role="status"
-			aria-label="Loading summary"
-		>
-			<span className="sr-only">Loading summary...</span>
-			{keys.map((key) => (
-				<div
-					key={key}
-					className="rounded-2xl border border-white/10 bg-slate-950/50 p-4"
-				>
-					<Skeleton className="h-3 w-2/3" />
-					<Skeleton className="mt-3 h-7 w-1/2" />
 				</div>
 			))}
 		</div>

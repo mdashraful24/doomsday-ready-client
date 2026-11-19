@@ -17,14 +17,16 @@ const MoviesView = () => {
 	} = useMovies();
 
 	return (
-		<div className="grid gap-6 xl:grid-cols-[minmax(300px,0.9fr)_minmax(0,1.4fr)]">
-			<MovieForm
-				form={form}
-				movies={movies}
-				saving={saving}
-				onFormChange={setForm}
-				onSubmit={() => void createMovie()}
-			/>
+		<div className="grid items-start gap-6 lg:grid-cols-[minmax(300px,0.9fr)_minmax(0,1.4fr)]">
+			<div className="lg:sticky lg:top-24 lg:z-10 lg:self-start">
+				<MovieForm
+					form={form}
+					movies={movies}
+					saving={saving}
+					onFormChange={setForm}
+					onSubmit={() => void createMovie()}
+				/>
+			</div>
 			<MovieLibrary
 				movies={movies}
 				loading={loading}

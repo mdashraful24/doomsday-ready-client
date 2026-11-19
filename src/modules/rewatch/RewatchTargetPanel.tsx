@@ -3,7 +3,7 @@ import { Field } from "../../components/Field";
 import { ClockIcon, RouteIcon } from "../../components/Icons";
 import { Select } from "../../components/Select";
 import { SectionCard } from "../../components/SectionCard";
-import { Skeleton } from "../../components/Skeleton";
+import { Skeleton } from "../../components/skeletons";
 import type { Movie, RewatchOrder } from "../../types";
 import {
 	chipClass,

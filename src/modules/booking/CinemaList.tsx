@@ -2,7 +2,7 @@ import { EmptyState } from "../../components/EmptyState";
 import { FilmIcon, TrashIcon } from "../../components/Icons";
 import { Pagination } from "../../components/Pagination";
 import { SectionCard } from "../../components/SectionCard";
-import { SkeletonList } from "../../components/Skeleton";
+import { SkeletonList } from "../../components/skeletons";
 import { usePagination } from "../../hooks/usePagination";
 import type { Cinema } from "../../types";
 import { chipClass, dangerButtonClass, rowClass } from "../../ui";
