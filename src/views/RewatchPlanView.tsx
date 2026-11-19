@@ -110,10 +110,18 @@ const RewatchPlanView = () => {
 							{order.watchedCount} of {order.totalCount} watched
 						</span>
 						<span>
-							{formatRuntime(order.unwatchedTotalRuntimeMinutes)} remaining
+							{formatRuntime(order.unwatchedTotalRuntimeMinutes)} prerequisites
+							remaining
 						</span>
 					</div>
-					<div className="h-2 overflow-hidden rounded-full bg-slate-950">
+					<div
+						className="h-2 overflow-hidden rounded-full bg-slate-950"
+						role="progressbar"
+						aria-label="Rewatch progress"
+						aria-valuenow={progress}
+						aria-valuemin={0}
+						aria-valuemax={100}
+					>
 						<div
 							className="h-full rounded-full bg-indigo-400 transition-[width] duration-200"
 							style={{ width: `${progress}%` }}

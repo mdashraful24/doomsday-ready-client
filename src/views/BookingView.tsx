@@ -178,6 +178,11 @@ const BookingView = () => {
 	const selectedCinema = cinemas.find(
 		(cinema) => cinema.id === selectedCinemaId,
 	);
+	const parsedGroupSize = Number(groupSize);
+	const validGroupSize =
+		Number.isInteger(parsedGroupSize) &&
+		parsedGroupSize >= 1 &&
+		parsedGroupSize <= 10000;
 
 	if (loading) {
 		return <p className={mutedClass}>Loading booking data...</p>;
@@ -251,10 +256,15 @@ const BookingView = () => {
 									}}
 								/>
 							</label>
+							{groupSize && !validGroupSize && (
+								<p className="text-xs text-red-200">
+									Enter a whole number from 1 to 10,000.
+								</p>
+							)}
 							<button
 								type="button"
 								className={primaryButtonClass}
-								disabled={!selectedCinemaId || checking}
+								disabled={!selectedCinemaId || !validGroupSize || checking}
 								onClick={() => void handleCheckQuote()}
 							>
 								{checking ? "Checking..." : "Check bundles"}
