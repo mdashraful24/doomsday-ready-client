@@ -2,23 +2,23 @@
 
 CineQuest is a movie rewatch planning and cinema booking platform that helps fans discover watch orders, track their progress, and organize opening-night group bookings.
 
-Built with Vite, React, TypeScript, and Tailwind CSS.
+Built with Vite, React, TypeScript, Tailwind CSS, and React Router.
 
-## Movies View
+## Movies View (`/movies`)
 
 - Add a movie with title, release year, runtime, prerequisites, and watched state.
 - Edit prerequisites from the movie library.
 - Tick movies as watched.
 - Delete movies with a confirmation step.
 
-## Rewatch Plan View
+## Rewatch Plan View (`/rewatch`)
 
 - Pick a target movie.
 - See prerequisites in rewatch order with watched ticks.
 - Track progress as “X of Y watched” with a progress bar.
 - See remaining watch time for unwatched prerequisites.
 
-## Booking View
+## Booking View (`/booking`)
 
 - Pick a cinema and enter a group size.
 - See the exact bundles to buy or an explicit “Not possible” result.
