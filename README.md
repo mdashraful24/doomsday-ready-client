@@ -16,6 +16,14 @@ Vite + React + TypeScript + Tailwind CSS frontend for CineQuest.
 - Track progress as “X of Y watched” with a progress bar.
 - See remaining watch time for unwatched prerequisites.
 
+## Booking View
+
+- Pick a cinema and enter a group size.
+- See the exact bundles to buy or an explicit “Not possible” result.
+- Confirm bookings, then cancel or delete them from the bookings list.
+- Delete cinemas with a confirmation step.
+- See remaining rewatch time for the selected target movie.
+
 ## Run Locally
 
 ```bash

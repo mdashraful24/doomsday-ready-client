@@ -1,5 +1,9 @@
 import type {
 	ApiResponse,
+	Booking,
+	BookingQuote,
+	Cinema,
+	CreateBookingPayload,
 	CreateMoviePayload,
 	Movie,
 	RewatchOrder,
@@ -57,4 +61,33 @@ export const moviesApi = {
 		}),
 	getRewatchOrder: (id: string) =>
 		request<RewatchOrder>(`/movies/${encodeURIComponent(id)}/rewatch-order`),
+};
+
+export const cinemasApi = {
+	list: () => request<Cinema[]>("/cinemas"),
+	remove: (id: string) =>
+		request<{ id: string }>(`/cinemas/${encodeURIComponent(id)}`, {
+			method: "DELETE",
+		}),
+	getBookingQuote: (id: string, groupSize: number) =>
+		request<BookingQuote>(
+			`/cinemas/${encodeURIComponent(id)}/booking?groupSize=${groupSize}`,
+		),
+	createBooking: (id: string, payload: CreateBookingPayload) =>
+		request<Booking>(`/cinemas/${encodeURIComponent(id)}/booking`, {
+			method: "POST",
+			body: JSON.stringify(payload),
+		}),
+};
+
+export const bookingsApi = {
+	list: () => request<Booking[]>("/bookings"),
+	cancel: (id: string) =>
+		request<Booking>(`/bookings/${encodeURIComponent(id)}/cancel`, {
+			method: "PATCH",
+		}),
+	remove: (id: string) =>
+		request<{ id: string }>(`/bookings/${encodeURIComponent(id)}`, {
+			method: "DELETE",
+		}),
 };

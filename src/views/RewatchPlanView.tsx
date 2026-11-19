@@ -10,16 +10,7 @@ import {
 	labelClass,
 	mutedClass,
 } from "../ui";
-
-const formatRuntime = (minutes: number) => {
-	const hours = Math.floor(minutes / 60);
-	const remainder = minutes % 60;
-
-	if (hours === 0) return `${remainder}m`;
-	if (remainder === 0) return `${hours}h`;
-
-	return `${hours}h ${remainder}m`;
-};
+import { formatRuntime } from "../utils";
 
 const RewatchPlanView = () => {
 	const [movies, setMovies] = useState<Movie[]>([]);

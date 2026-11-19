@@ -1,18 +1,33 @@
 import { useState } from "react";
+import BookingView from "./views/BookingView";
 import MoviesView from "./views/MoviesView";
 import RewatchPlanView from "./views/RewatchPlanView";
 
-type View = "movies" | "rewatch";
+type View = "movies" | "rewatch" | "booking";
 
 const tabs: { id: View; label: string }[] = [
 	{ id: "movies", label: "Movies" },
 	{ id: "rewatch", label: "Rewatch Plan" },
+	{ id: "booking", label: "Booking" },
 ];
+
+const titles: Record<View, string> = {
+	movies: "Movies",
+	rewatch: "Rewatch Plan",
+	booking: "Booking",
+};
 
 const tabClass = "rounded-lg px-3 py-2 text-sm font-semibold transition";
 
 const App = () => {
 	const [view, setView] = useState<View>("movies");
+
+	const renderView = () => {
+		if (view === "movies") return <MoviesView />;
+		if (view === "rewatch") return <RewatchPlanView />;
+
+		return <BookingView />;
+	};
 
 	return (
 		<main className="min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
@@ -21,9 +36,7 @@ const App = () => {
 					<p className="mb-1.5 text-xs font-bold uppercase tracking-[0.16em] text-indigo-300">
 						CineQuest
 					</p>
-					<h1 className="text-3xl font-semibold">
-						{view === "movies" ? "Movies" : "Rewatch Plan"}
-					</h1>
+					<h1 className="text-3xl font-semibold">{titles[view]}</h1>
 					<p className="mt-1.5 text-sm text-slate-400">
 						Plan Your Rewatch. Book Your Premiere.
 					</p>
@@ -46,7 +59,7 @@ const App = () => {
 				</nav>
 			</header>
 
-			{view === "movies" ? <MoviesView /> : <RewatchPlanView />}
+			{renderView()}
 		</main>
 	);
 };
