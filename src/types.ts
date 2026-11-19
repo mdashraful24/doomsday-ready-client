@@ -23,3 +23,16 @@ export type CreateMoviePayload = {
 };
 
 export type UpdateMoviePayload = Partial<CreateMoviePayload>;
+
+export type RewatchOrderMovie = Pick<
+	Movie,
+	"id" | "title" | "releaseYear" | "runtimeMinutes" | "watched"
+>;
+
+export type RewatchOrder = {
+	target: Pick<Movie, "id" | "title">;
+	movies: RewatchOrderMovie[];
+	totalCount: number;
+	watchedCount: number;
+	unwatchedTotalRuntimeMinutes: number;
+};

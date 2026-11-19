@@ -1,6 +1,6 @@
 # CineQuest Client
 
-Vite + React + TypeScript frontend for CineQuest.
+Vite + React + TypeScript + Tailwind CSS frontend for CineQuest.
 
 ## Movies View
 
@@ -8,6 +8,13 @@ Vite + React + TypeScript frontend for CineQuest.
 - Edit prerequisites from the movie library.
 - Tick movies as watched.
 - Delete movies with a confirmation step.
+
+## Rewatch Plan View
+
+- Pick a target movie.
+- See prerequisites in rewatch order with watched ticks.
+- Track progress as “X of Y watched” with a progress bar.
+- See remaining watch time for unwatched prerequisites.
 
 ## Run Locally
 

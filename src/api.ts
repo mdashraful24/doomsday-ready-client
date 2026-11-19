@@ -2,6 +2,7 @@ import type {
 	ApiResponse,
 	CreateMoviePayload,
 	Movie,
+	RewatchOrder,
 	UpdateMoviePayload,
 } from "./types";
 
@@ -54,4 +55,6 @@ export const moviesApi = {
 		request<{ id: string }>(`/movies/${encodeURIComponent(id)}`, {
 			method: "DELETE",
 		}),
+	getRewatchOrder: (id: string) =>
+		request<RewatchOrder>(`/movies/${encodeURIComponent(id)}/rewatch-order`),
 };
