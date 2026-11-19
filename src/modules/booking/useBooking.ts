@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { bookingsApi, cinemasApi, getErrorMessage, moviesApi } from "../../api";
 import { useConfirm } from "../../hooks/useConfirm";
-import type { Booking, BookingQuote, Cinema } from "../../types";
+import type {
+	Booking,
+	BookingQuote,
+	Cinema,
+	UpdateCinemaPayload,
+} from "../../types";
 import type { RewatchSummary } from "./types";
 
 export const useBooking = () => {
@@ -188,6 +193,30 @@ export const useBooking = () => {
 		}
 	};
 
+	const editCinema = async (id: string, payload: UpdateCinemaPayload) => {
+		setBusyId(id);
+
+		try {
+			const updated = await cinemasApi.update(id, payload);
+
+			setCinemas((current) =>
+				current.map((cinema) => (cinema.id === id ? updated : cinema)),
+			);
+			setQuote(null);
+			toast.success("Cinema updated");
+			await loadBookings();
+
+			return true;
+		} catch (error) {
+			toast.error("Could not update cinema", {
+				description: getErrorMessage(error),
+			});
+			return false;
+		} finally {
+			setBusyId("");
+		}
+	};
+
 	const updateCinema = (id: string) => {
 		setSelectedCinemaId(id);
 		setQuote(null);
@@ -225,6 +254,7 @@ export const useBooking = () => {
 		cancelBooking,
 		deleteBooking,
 		deleteCinema,
+		editCinema,
 		updateCinema,
 		updateGroupSize,
 	};

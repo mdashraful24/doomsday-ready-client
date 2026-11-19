@@ -22,6 +22,7 @@ const BookingView = () => {
 		checkQuote,
 		createBooking,
 		deleteCinema,
+		editCinema,
 		updateCinema,
 		updateGroupSize,
 	} = useBooking();
@@ -74,6 +75,7 @@ const BookingView = () => {
 					loading={loading}
 					busyId={busyId}
 					onDelete={(cinema) => void deleteCinema(cinema)}
+					onEdit={editCinema}
 				/>
 			</div>
 		</div>

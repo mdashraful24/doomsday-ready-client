@@ -46,6 +46,12 @@ export type Cinema = {
 	bundleSizes: number[];
 };
 
+export type UpdateCinemaPayload = {
+	name?: string;
+	bundleSizes?: number[];
+	image?: File;
+};
+
 export type BundleSelection = {
 	size: number;
 	quantity: number;

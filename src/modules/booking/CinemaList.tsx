@@ -1,11 +1,18 @@
+import { useState } from "react";
 import { EmptyState } from "../../components/EmptyState";
-import { FilmIcon, TrashIcon } from "../../components/Icons";
+import { FilmIcon, PencilIcon, TrashIcon } from "../../components/Icons";
 import { Pagination } from "../../components/Pagination";
 import { SectionCard } from "../../components/SectionCard";
 import { SkeletonList } from "../../components/skeletons";
 import { usePagination } from "../../hooks/usePagination";
-import type { Cinema } from "../../types";
-import { chipClass, dangerButtonClass, rowClass } from "../../ui";
+import type { Cinema, UpdateCinemaPayload } from "../../types";
+import {
+	chipClass,
+	dangerButtonClass,
+	rowClass,
+	secondaryButtonClass,
+} from "../../ui";
+import { CinemaEditDialog } from "./CinemaEditDialog";
 
 const PAGE_SIZE = 4;
 
@@ -14,6 +21,7 @@ type CinemaListProps = {
 	loading: boolean;
 	busyId: string;
 	onDelete: (cinema: Cinema) => void;
+	onEdit: (id: string, payload: UpdateCinemaPayload) => Promise<boolean>;
 };
 
 export const CinemaList = ({
@@ -21,7 +29,9 @@ export const CinemaList = ({
 	loading,
 	busyId,
 	onDelete,
+	onEdit,
 }: CinemaListProps) => {
+	const [editingCinema, setEditingCinema] = useState<Cinema | null>(null);
 	const { page, pageCount, startIndex, setPage } = usePagination(
 		cinemas.length,
 		PAGE_SIZE,
@@ -56,15 +66,26 @@ export const CinemaList = ({
 											))}
 										</div>
 									</div>
-									<button
-										type="button"
-										className={dangerButtonClass}
-										disabled={busyId === cinema.id}
-										onClick={() => onDelete(cinema)}
-									>
-										<TrashIcon className="size-4" />
-										Delete
-									</button>
+									<div className="flex shrink-0 gap-2">
+										<button
+											type="button"
+											className={secondaryButtonClass}
+											disabled={busyId === cinema.id}
+											onClick={() => setEditingCinema(cinema)}
+										>
+											<PencilIcon className="size-4" />
+											Edit
+										</button>
+										<button
+											type="button"
+											className={dangerButtonClass}
+											disabled={busyId === cinema.id}
+											onClick={() => onDelete(cinema)}
+										>
+											<TrashIcon className="size-4" />
+											Delete
+										</button>
+									</div>
 								</div>
 							</article>
 						))}
@@ -86,6 +107,14 @@ export const CinemaList = ({
 						/>
 					)}
 				</>
+			)}
+			{editingCinema && (
+				<CinemaEditDialog
+					cinema={editingCinema}
+					saving={busyId === editingCinema.id}
+					onSave={onEdit}
+					onClose={() => setEditingCinema(null)}
+				/>
 			)}
 		</SectionCard>
 	);

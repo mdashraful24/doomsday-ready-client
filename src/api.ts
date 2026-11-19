@@ -7,6 +7,7 @@ import type {
 	CreateMoviePayload,
 	Movie,
 	RewatchOrder,
+	UpdateCinemaPayload,
 	UpdateMoviePayload,
 } from "./types";
 
@@ -14,15 +15,7 @@ const baseUrl = (
 	import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/api"
 ).replace(/\/+$/, "");
 
-const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
-	const response = await fetch(`${baseUrl}${path}`, {
-		...init,
-		headers: {
-			"Content-Type": "application/json",
-			...init?.headers,
-		},
-	});
-
+const readResponse = async <T>(response: Response): Promise<T> => {
 	const body = (await response
 		.json()
 		.catch(() => null)) as ApiResponse<T> | null;
@@ -38,6 +31,31 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
 	}
 
 	return body.data;
+};
+
+const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
+	const response = await fetch(`${baseUrl}${path}`, {
+		...init,
+		headers: {
+			"Content-Type": "application/json",
+			...init?.headers,
+		},
+	});
+
+	return readResponse<T>(response);
+};
+
+const requestFormData = async <T>(
+	path: string,
+	formData: FormData,
+	init?: RequestInit,
+): Promise<T> => {
+	const response = await fetch(`${baseUrl}${path}`, {
+		...init,
+		body: formData,
+	});
+
+	return readResponse<T>(response);
 };
 
 export const getErrorMessage = (error: unknown) =>
@@ -65,6 +83,29 @@ export const moviesApi = {
 
 export const cinemasApi = {
 	list: () => request<Cinema[]>("/cinemas"),
+	update: (id: string, payload: UpdateCinemaPayload) => {
+		const formData = new FormData();
+
+		if (payload.name !== undefined) {
+			formData.append("name", payload.name);
+		}
+
+		if (payload.bundleSizes !== undefined) {
+			formData.append("bundleSizes", payload.bundleSizes.join(","));
+		}
+
+		if (payload.image) {
+			formData.append("image", payload.image);
+		}
+
+		return requestFormData<Cinema>(
+			`/cinemas/${encodeURIComponent(id)}`,
+			formData,
+			{
+				method: "PATCH",
+			},
+		);
+	},
 	remove: (id: string) =>
 		request<{ id: string }>(`/cinemas/${encodeURIComponent(id)}`, {
 			method: "DELETE",

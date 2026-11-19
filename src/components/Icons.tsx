@@ -111,6 +111,22 @@ export const TrashIcon = ({
 	</svg>
 );
 
+export const PencilIcon = ({
+	className = iconBase,
+	title = "Edit",
+}: IconProps) => (
+	<svg
+		className={className}
+		viewBox="0 0 24 24"
+		aria-label={title}
+		{...iconAttributes}
+	>
+		<title>{title}</title>
+		<path d="m4 20 4.5-1 10.7-10.7a2.1 2.1 0 0 0-3-3L5.5 16l-1.5 4Z" />
+		<path d="m14.5 6.5 3 3" />
+	</svg>
+);
+
 export const CheckIcon = ({
 	className = iconBase,
 	title = "Check",
