@@ -8,7 +8,9 @@ The product flow is: build the movie library, choose a target film, follow the c
 
 This repository contains the React/Vite client application. It communicates with the CineQuest REST API for movies, cinemas, rewatch orders, quotes, and bookings. A shared top-level data cache keeps data available between routes, while background refresh keeps the UI current after create, update, cancel, and delete actions.
 
-## Screenshot
+<div align="center">
+  <img height="500" src="https://drive.google.com/uc?export=view&id=1qcu_0ZqiJ6hrQkBwIcxP_9jvjtwcfjJd" alt="CineQuest" />
+</div>
 
 ## Core Technologies
 
