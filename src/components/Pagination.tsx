@@ -1,3 +1,5 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 type PaginationProps = {
 	page: number;
 	pageCount: number;
@@ -59,7 +61,7 @@ export const Pagination = ({
 					aria-label="Previous page"
 					onClick={() => onPageChange(page - 1)}
 				>
-					‹
+					<ChevronLeft size={18} />
 				</button>
 				{getPageItems(page, pageCount).map((item) =>
 					item.type === "ellipsis" ? (
@@ -93,7 +95,7 @@ export const Pagination = ({
 					aria-label="Next page"
 					onClick={() => onPageChange(page + 1)}
 				>
-					›
+					<ChevronRight size={18} />
 				</button>
 			</div>
 		</div>

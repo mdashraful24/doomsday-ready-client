@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import {
+	ArrowRightIcon,
 	CloseIcon,
 	FilmIcon,
 	MenuIcon,
@@ -9,7 +10,7 @@ import {
 	TicketIcon,
 } from "./Icons";
 import { Toaster } from "./Toaster";
-import { eyebrowClass, iconButtonClass } from "../ui";
+import { eyebrowClass, iconButtonClass, secondaryButtonClass } from "../ui";
 
 const navigation = [
 	{ to: "/movies", label: "Movies", icon: FilmIcon },
@@ -159,12 +160,23 @@ export const AppShell = () => {
 							</p>
 						</div>
 					</div>
+
+					{/* Medium and Small screen only */}
+					<div className="block lg:hidden md:max-w-72 w-full">
+						<Link
+							to="/booking/list"
+							className={`${secondaryButtonClass} justify-center w-full`}
+						>
+							View booking list
+							<ArrowRightIcon className="size-4" />
+						</Link>
+					</div>
 				</section>
 
 				<Outlet />
 			</main>
 
-			<footer className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 pb-8 text-xs text-slate-500 sm:flex-row sm:px-6 lg:px-8">
+			<footer className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 pb-8 text-xs text-slate-400 sm:flex-row sm:px-6 lg:px-8">
 				<p>CineQuest · Plan the path, then own the premiere.</p>
 				<p>&copy; {new Date().getFullYear()} CineQuest. All rights reserved.</p>
 			</footer>

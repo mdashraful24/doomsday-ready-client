@@ -37,6 +37,7 @@ This repository contains the React/Vite client application. It communicates with
 - Tailwind CSS 4 — utility-first styling for the responsive dark theme.
 - React Router 7 — client-side routes for movies, rewatch plan, booking, booking list, and 404 handling.
 - Sonner — success, error, and warning toast notifications.
+- Lucide React — icon components for pagination controls.
 - Biome — formatting and linting for client source files.
 
 ## Key Features
@@ -61,6 +62,7 @@ This repository contains the React/Vite client application. It communicates with
 | `react` | `^19.2.0` | UI component library |
 | `react-dom` | `^19.2.0` | React rendering for the browser |
 | `react-router-dom` | `^7.18.6` | Client-side routing and navigation |
+| `lucide-react` | `^1.77.0` | Icon components for pagination controls |
 | `sonner` | `^2.0.8` | Toast notifications |
 
 ### Development
