@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import { createPortal } from "react-dom";
 import type { Cinema, UpdateCinemaPayload } from "../../types";
 import {
 	errorMessageClass,
@@ -112,7 +113,7 @@ export const CinemaEditDialog = ({
 		if (saved) onClose();
 	};
 
-	return (
+	return createPortal(
 		<div className={modalBackdropClass}>
 			<div
 				role="dialog"
@@ -190,6 +191,7 @@ export const CinemaEditDialog = ({
 					</div>
 				</form>
 			</div>
-		</div>
+		</div>,
+		document.body,
 	);
 };

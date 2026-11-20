@@ -18,6 +18,7 @@ import { Toaster } from "./components/Toaster";
 import BookingPage from "./pages/BookingPage";
 import BookingsPage from "./pages/BookingsPage";
 import MoviesPage from "./pages/MoviesPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import RewatchPlanPage from "./pages/RewatchPlanPage";
 import { ConfirmProvider } from "./providers/ConfirmProvider";
 import { secondaryButtonClass } from "./ui";
@@ -66,6 +67,15 @@ const routes: RouteItem[] = [
 	},
 ];
 
+const notFoundRoute: RouteItem = {
+	to: "*",
+	label: "Not found",
+	title: "Page not found",
+	description:
+		"The page you are looking for is not part of this screening schedule.",
+	showInNav: false,
+};
+
 const navigation = routes.filter((item) => item.showInNav !== false);
 
 const tabClass =
@@ -74,7 +84,7 @@ const tabClass =
 const AppShell = () => {
 	const location = useLocation();
 	const active =
-		routes.find((item) => item.to === location.pathname) ?? routes[0];
+		routes.find((item) => item.to === location.pathname) ?? notFoundRoute;
 
 	return (
 		<div className="relative min-h-screen overflow-x-clip bg-[#070b18] text-slate-100">
@@ -187,7 +197,7 @@ const AppShell = () => {
 					<Route path="/rewatch" element={<RewatchPlanPage />} />
 					<Route path="/booking" element={<BookingPage />} />
 					<Route path="/booking/list" element={<BookingsPage />} />
-					<Route path="*" element={<Navigate to="/movies" replace />} />
+					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</main>
 
