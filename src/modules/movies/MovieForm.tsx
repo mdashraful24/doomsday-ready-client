@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { FormEvent } from "react";
 import { Field } from "../../components/Field";
 import { PlusIcon } from "../../components/Icons";
@@ -8,8 +7,6 @@ import type { Movie } from "../../types";
 import {
 	checkboxClass,
 	checkboxInputClass,
-	errorTextClass,
-	fieldHintClass,
 	inputClass,
 	primaryButtonClass,
 } from "../../ui";
@@ -31,13 +28,7 @@ export const MovieForm = ({
 	onFormChange,
 	onSubmit,
 }: MovieFormProps) => {
-	const [touched, setTouched] = useState({
-		title: false,
-		releaseYear: false,
-		runtimeMinutes: false,
-	});
-	const errors = validateMovieForm(form);
-	const isValid = Object.keys(errors).length === 0;
+	const isValid = Object.keys(validateMovieForm(form)).length === 0;
 
 	const options = movies.map((movie) => ({
 		value: movie.id,
@@ -48,21 +39,7 @@ export const MovieForm = ({
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		if (!isValid) {
-			setTouched({
-				title: true,
-				releaseYear: true,
-				runtimeMinutes: true,
-			});
-			return;
-		}
-
-		setTouched({
-			title: false,
-			releaseYear: false,
-			runtimeMinutes: false,
-		});
-		onSubmit();
+		if (isValid) onSubmit();
 	};
 
 	return (
@@ -79,28 +56,17 @@ export const MovieForm = ({
 						className={inputClass}
 						placeholder="Avengers: Doomsday"
 						value={form.title}
-						aria-invalid={touched.title && Boolean(errors.title)}
-						aria-describedby={touched.title && errors.title ? "movie-title-error" : undefined}
-						onBlur={() => setTouched((current) => ({ ...current, title: true }))}
 						onChange={(event) =>
 							onFormChange({ ...form, title: event.target.value })
 						}
 					/>
-					{touched.title && errors.title && (
-						<span id="movie-title-error" className={errorTextClass}>
-							{errors.title}
-						</span>
-					)}
 				</Field>
 
 				<div className="grid gap-4 sm:grid-cols-2">
 					<Field label="Release year" htmlFor="movie-year">
 						<input
 							id="movie-year"
-							required
 							type="number"
-							min={1888}
-							max={2100}
 							className={inputClass}
 							placeholder="2026"
 							value={form.releaseYear}
@@ -109,17 +75,10 @@ export const MovieForm = ({
 							}
 						/>
 					</Field>
-					<Field
-						label="Runtime (minutes)"
-						htmlFor="movie-runtime"
-						// hint="Measured in minutes"
-					>
+					<Field label="Runtime (minutes)" htmlFor="movie-runtime">
 						<input
 							id="movie-runtime"
-							required
 							type="number"
-							min={1}
-							max={300}
 							className={inputClass}
 							placeholder="160"
 							value={form.runtimeMinutes}
@@ -159,7 +118,11 @@ export const MovieForm = ({
 					Already watched
 				</label>
 
-				<button type="submit" className={primaryButtonClass} disabled={saving}>
+				<button
+					type="submit"
+					className={primaryButtonClass}
+					disabled={saving || !isValid}
+				>
 					<PlusIcon className="size-4" />
 					{saving ? "Adding..." : "Add movie"}
 				</button>

@@ -3,7 +3,6 @@ import type { FormEvent } from "react";
 import { createPortal } from "react-dom";
 import type { Cinema, UpdateCinemaPayload } from "../../types";
 import {
-	errorMessageClass,
 	eyebrowClass,
 	fieldHintClass,
 	fieldLabelClass,
@@ -63,7 +62,6 @@ export const CinemaEditDialog = ({
 	const [name, setName] = useState(cinema.name);
 	const [bundleSizes, setBundleSizes] = useState(initialBundleSizes);
 	const [image, setImage] = useState<File>();
-	const [error, setError] = useState("");
 	const nameRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
@@ -87,8 +85,14 @@ export const CinemaEditDialog = ({
 		};
 	}, []);
 
+	const trimmedName = name.trim();
+	const bundleResult = parseBundleSizes(bundleSizes);
+	const isValid =
+		trimmedName.length > 0 &&
+		trimmedName.length <= 200 &&
+		"sizes" in bundleResult;
 	const isDirty =
-		name.trim() !== cinema.name ||
+		trimmedName !== cinema.name ||
 		bundleSizes
 			.split(",")
 			.map((part) => part.trim())
@@ -98,25 +102,12 @@ export const CinemaEditDialog = ({
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setError("");
 
-		const trimmedName = name.trim();
-
-		if (trimmedName.length === 0 || trimmedName.length > 200) {
-			setError("Name must be between 1 and 200 characters.");
-			return;
-		}
-
-		const result = parseBundleSizes(bundleSizes);
-
-		if (result.error) {
-			setError(result.error);
-			return;
-		}
+		if (!isValid || !("sizes" in bundleResult)) return;
 
 		const saved = await onSave(cinema.id, {
 			name: trimmedName,
-			bundleSizes: result.sizes,
+			bundleSizes: bundleResult.sizes,
 			...(image ? { image } : {}),
 		});
 
@@ -142,16 +133,13 @@ export const CinemaEditDialog = ({
 					Update this venue and its bundle sizes.
 				</p>
 
-				<form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
-					{error && <p className={errorMessageClass}>{error}</p>}
-
+				<form className="mt-6 grid gap-4" noValidate onSubmit={handleSubmit}>
 					<label className={labelClass}>
 						<span className={fieldLabelClass}>Name</span>
 						<input
 							ref={nameRef}
 							className={inputClass}
 							value={name}
-							maxLength={200}
 							onChange={(event) => setName(event.target.value)}
 						/>
 					</label>
@@ -182,29 +170,22 @@ export const CinemaEditDialog = ({
 						</span>
 					</label>
 
-					<div className="mt-2 grid gap-2">
-						{/* {!isDirty && (
-							<p className={`${fieldHintClass} text-right`}>
-								No changes to save.
-							</p>
-						)} */}
-						<div className="flex justify-end gap-2">
-							<button
-								type="button"
-								className={secondaryButtonClass}
-								disabled={saving}
-								onClick={onClose}
-							>
-								Cancel
-							</button>
-							<button
-								type="submit"
-								className={primaryButtonClass}
-								disabled={saving || !isDirty}
-							>
-								{saving ? "Saving..." : "Save changes"}
-							</button>
-						</div>
+					<div className="mt-2 flex justify-end gap-2">
+						<button
+							type="button"
+							className={secondaryButtonClass}
+							disabled={saving}
+							onClick={onClose}
+						>
+							Cancel
+						</button>
+						<button
+							type="submit"
+							className={primaryButtonClass}
+							disabled={saving || !isDirty || !isValid}
+						>
+							{saving ? "Saving..." : "Save changes"}
+						</button>
 					</div>
 				</form>
 			</div>

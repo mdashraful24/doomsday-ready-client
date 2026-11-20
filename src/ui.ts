@@ -37,8 +37,6 @@ export const destructiveButtonClass =
 export const errorMessageClass =
 	"mb-5 flex items-center gap-2 rounded-xl border border-rose-400/25 bg-rose-500/10 px-4 py-3 text-sm text-rose-100 backdrop-blur";
 
-export const errorTextClass = "text-xs leading-5 text-rose-300";
-
 export const successMessageClass =
 	"mb-5 flex items-center gap-2 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100 backdrop-blur";
 
