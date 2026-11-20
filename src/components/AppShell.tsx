@@ -21,13 +21,13 @@ export const AppShell = () => {
 				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
 					<Link className="group flex items-center gap-3" to="/movies">
 						<span className="grid size-11 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-400 to-fuchsia-400 text-slate-950 shadow-lg shadow-indigo-500/25 transition duration-200 group-hover:-translate-y-0.5">
-							<FilmIcon className="size-5" title="CineQuest" />
+							<FilmIcon className="size-6" title="CineQuest" />
 						</span>
 						<span>
-							<span className="block text-sm font-black tracking-[0.24em] text-white uppercase">
+							<span className="block text-md font-black tracking-[0.24em] text-white uppercase">
 								CineQuest
 							</span>
-							<span className="block text-[0.6875rem] text-slate-400">
+							<span className="block text-sm text-slate-400">
 								Your movie marathon command center
 							</span>
 						</span>
@@ -96,6 +96,11 @@ export const AppShell = () => {
 
 				<Outlet />
 			</main>
+
+			<footer className="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4 px-4 pb-8 text-xs text-slate-500 sm:px-6 lg:px-8">
+				<p>CineQuest · Plan the path, then own the premiere.</p>
+				<p>&copy; 2023 CineQuest. All rights reserved.</p>
+			</footer>
 			<Toaster />
 		</div>
 	);

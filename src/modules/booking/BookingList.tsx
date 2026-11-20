@@ -91,7 +91,9 @@ export const BookingList = ({
 										<button
 											type="button"
 											className={dangerButtonClass}
-											disabled={busyId === booking.id}
+											disabled={
+												busyId === booking.id || booking.status === "CANCELLED"
+											}
 											onClick={() => onDelete(booking)}
 										>
 											<TrashIcon className="size-4" />
