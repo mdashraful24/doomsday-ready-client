@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { bookingsApi, cinemasApi, getErrorMessage, moviesApi } from "../../api";
+import { bookingsApi, cinemasApi, getErrorMessage } from "../../api";
 import { useConfirm } from "../../hooks/useConfirm";
+import { getTargetMovieId, useAppData } from "../../providers/AppDataProvider";
 import type {
 	Booking,
 	BookingQuote,
@@ -12,64 +13,77 @@ import type { RewatchSummary } from "./types";
 
 export const useBooking = () => {
 	const confirm = useConfirm();
-	const [cinemas, setCinemas] = useState<Cinema[]>([]);
-	const [bookings, setBookings] = useState<Booking[]>([]);
+	const {
+		movies,
+		cinemas,
+		bookings,
+		orders,
+		loadingMovies,
+		loadingCinemas,
+		loadingBookings,
+		loadedMovies,
+		loadedCinemas,
+		loadedBookings,
+		loadingOrders,
+		loadedOrders,
+		loadMovies,
+		loadCinemas,
+		loadBookings,
+		loadOrder,
+		setCinemas,
+		setBookings,
+	} = useAppData();
 	const [selectedCinemaId, setSelectedCinemaId] = useState("");
 	const [groupSize, setGroupSize] = useState("");
 	const [quote, setQuote] = useState<BookingQuote | null>(null);
-	const [rewatchSummary, setRewatchSummary] = useState<RewatchSummary | null>(
-		null,
-	);
-	const [loading, setLoading] = useState(true);
 	const [checking, setChecking] = useState(false);
 	const [creating, setCreating] = useState(false);
 	const [busyId, setBusyId] = useState("");
-
-	const loadBookings = useCallback(async () => {
-		setBookings(await bookingsApi.list());
-	}, []);
-
-	const loadRewatchSummary = useCallback(async () => {
-		const movies = await moviesApi.list();
-		const target =
-			movies.find((movie) => movie.title === "Avengers: Doomsday") ?? movies[0];
-
-		if (!target) {
-			setRewatchSummary(null);
-			return;
-		}
-
-		const order = await moviesApi.getRewatchOrder(target.id);
-
-		setRewatchSummary({
-			targetTitle: order.target.title,
-			watchedCount: order.watchedCount,
-			totalCount: order.totalCount,
-			remainingMinutes: order.unwatchedTotalRuntimeMinutes,
-		});
-	}, []);
-
-	const load = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			const cinemaList = await cinemasApi.list();
-
-			setCinemas(cinemaList);
-			setSelectedCinemaId("");
-			await Promise.all([loadBookings(), loadRewatchSummary()]);
-		} catch (error) {
-			toast.error("Could not load booking data", {
-				description: getErrorMessage(error),
-			});
-		} finally {
-			setLoading(false);
-		}
-	}, [loadBookings, loadRewatchSummary]);
+	const initialMoviesLoad = useRef(loadedMovies);
+	const initialCinemasLoad = useRef(loadedCinemas);
+	const initialBookingsLoad = useRef(loadedBookings);
+	const requestedOrderIds = useRef(new Set<string>());
 
 	useEffect(() => {
-		void load();
-	}, [load]);
+		void loadMovies({ silent: initialMoviesLoad.current });
+		void loadCinemas({ silent: initialCinemasLoad.current });
+		void loadBookings({ silent: initialBookingsLoad.current });
+	}, [loadMovies, loadCinemas, loadBookings]);
+
+	useEffect(() => {
+		if (
+			selectedCinemaId &&
+			!cinemas.some((cinema) => cinema.id === selectedCinemaId)
+		) {
+			setSelectedCinemaId("");
+		}
+	}, [cinemas, selectedCinemaId]);
+
+	const targetId = getTargetMovieId(movies);
+
+	useEffect(() => {
+		if (!targetId) return;
+
+		const silent = requestedOrderIds.current.has(targetId);
+		requestedOrderIds.current.add(targetId);
+		void loadOrder(targetId, { silent });
+	}, [targetId, loadOrder]);
+
+	const targetOrder = targetId ? (orders[targetId] ?? null) : null;
+	const rewatchSummary: RewatchSummary | null = targetOrder
+		? {
+				targetTitle: targetOrder.target.title,
+				watchedCount: targetOrder.watchedCount,
+				totalCount: targetOrder.totalCount,
+				remainingMinutes: targetOrder.unwatchedTotalRuntimeMinutes,
+			}
+		: null;
+	const targetOrderLoading = Boolean(loadingOrders[targetId]);
+	const loading =
+		loadingMovies ||
+		loadingCinemas ||
+		loadingBookings ||
+		(Boolean(targetId) && (targetOrderLoading || !loadedOrders[targetId]));
 
 	const checkQuote = async () => {
 		setChecking(true);
@@ -102,14 +116,14 @@ export const useBooking = () => {
 		setCreating(true);
 
 		try {
-			await cinemasApi.createBooking(quote.cinemaId, {
+			const created = await cinemasApi.createBooking(quote.cinemaId, {
 				groupSize: quote.groupSize,
 			});
+			setBookings((current) => [created, ...current]);
 			toast.success("Booking confirmed");
 			setGroupSize("");
 			setSelectedCinemaId("");
 			setQuote(null);
-			await loadBookings();
 		} catch (error) {
 			toast.error("Could not confirm booking", {
 				description: getErrorMessage(error),
@@ -132,9 +146,11 @@ export const useBooking = () => {
 		setBusyId(booking.id);
 
 		try {
-			await bookingsApi.cancel(booking.id);
+			const updated = await bookingsApi.cancel(booking.id);
+			setBookings((current) =>
+				current.map((item) => (item.id === updated.id ? updated : item)),
+			);
 			toast.success("Booking cancelled");
-			await loadBookings();
 		} catch (error) {
 			toast.error("Could not cancel booking", {
 				description: getErrorMessage(error),
@@ -157,8 +173,10 @@ export const useBooking = () => {
 
 		try {
 			await bookingsApi.remove(booking.id);
+			setBookings((current) =>
+				current.filter((item) => item.id !== booking.id),
+			);
 			toast.success("Booking deleted");
-			await loadBookings();
 		} catch (error) {
 			toast.error("Could not delete booking", {
 				description: getErrorMessage(error),
@@ -181,9 +199,12 @@ export const useBooking = () => {
 
 		try {
 			await cinemasApi.remove(cinema.id);
+			setCinemas((current) => current.filter((item) => item.id !== cinema.id));
+			setBookings((current) =>
+				current.filter((item) => item.cinemaId !== cinema.id),
+			);
 			setQuote(null);
 			toast.success("Cinema deleted");
-			await load();
 		} catch (error) {
 			toast.error("Could not delete cinema", {
 				description: getErrorMessage(error),
@@ -204,7 +225,7 @@ export const useBooking = () => {
 			);
 			setQuote(null);
 			toast.success("Cinema updated");
-			await loadBookings();
+			void loadBookings({ silent: true });
 
 			return true;
 		} catch (error) {

@@ -9,7 +9,7 @@ import { chipClass, statLabelClass, statValueClass } from "../../ui";
 import { formatRuntime } from "../../utils";
 import { MovieRow } from "./MovieRow";
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 5;
 
 type MovieLibraryProps = {
 	movies: Movie[];

@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { getErrorMessage, moviesApi } from "../../api";
-import type { Movie, RewatchOrder } from "../../types";
+import type { RewatchOrder } from "../../types";
+import { getTargetMovieId, useAppData } from "../../providers/AppDataProvider";
 
 type OrderMovie = RewatchOrder["movies"][number];
 
@@ -31,58 +32,51 @@ const withWatchedState = (
 };
 
 export const useRewatchPlan = () => {
-	const [movies, setMovies] = useState<Movie[]>([]);
-	const [selectedId, setSelectedId] = useState("");
-	const [order, setOrder] = useState<RewatchOrder | null>(null);
-	const [loading, setLoading] = useState(true);
+	const {
+		movies,
+		loadingMovies,
+		loadedMovies,
+		orders,
+		loadingOrders,
+		loadedOrders,
+		loadMovies,
+		loadOrder,
+		setMovies,
+		setOrder,
+	} = useAppData();
+	const [selectedId, setSelectedId] = useState(() => getTargetMovieId(movies));
 	const [updatingId, setUpdatingId] = useState("");
-
-	const loadOrder = useCallback(async (id: string) => {
-		if (!id) {
-			setOrder(null);
-			setLoading(false);
-			return;
-		}
-
-		setLoading(true);
-
-		try {
-			setOrder(await moviesApi.getRewatchOrder(id));
-		} catch (error) {
-			setOrder(null);
-			toast.error("Could not load rewatch order", {
-				description: getErrorMessage(error),
-			});
-		} finally {
-			setLoading(false);
-		}
-	}, []);
+	const initialLoad = useRef(loadedMovies);
+	const requestedOrderIds = useRef(new Set<string>());
 
 	useEffect(() => {
-		const load = async () => {
-			try {
-				const list = await moviesApi.list();
-				const target =
-					list.find((movie) => movie.title === "Avengers: Doomsday") ?? list[0];
+		void loadMovies({ silent: initialLoad.current });
+	}, [loadMovies]);
 
-				setMovies(list);
-				setSelectedId(target?.id ?? "");
-				await loadOrder(target?.id ?? "");
-			} catch (error) {
-				setMovies([]);
-				setLoading(false);
-				toast.error("Could not load movies", {
-					description: getErrorMessage(error),
-				});
-			}
-		};
+	useEffect(() => {
+		if (movies.length > 0 && !movies.some((movie) => movie.id === selectedId)) {
+			setSelectedId(getTargetMovieId(movies));
+		}
+	}, [movies, selectedId]);
 
-		void load();
-	}, [loadOrder]);
+	useEffect(() => {
+		if (!selectedId) return;
+
+		const silent = requestedOrderIds.current.has(selectedId);
+		requestedOrderIds.current.add(selectedId);
+		void loadOrder(selectedId, { silent });
+	}, [selectedId, loadOrder]);
+
+	const order = selectedId ? (orders[selectedId] ?? null) : null;
+	const orderLoading = Boolean(loadingOrders[selectedId]);
+	const loading =
+		loadingMovies ||
+		(Boolean(selectedId) && (orderLoading || !loadedOrders[selectedId]));
 
 	const selectTarget = (id: string) => {
 		setSelectedId(id);
-		void loadOrder(id);
+		void loadOrder(id, { silent: requestedOrderIds.current.has(id) });
+		requestedOrderIds.current.add(id);
 	};
 
 	const toggleWatched = async (movie: OrderMovie) => {
@@ -94,7 +88,9 @@ export const useRewatchPlan = () => {
 				item.id === movie.id ? { ...item, watched } : item,
 			),
 		);
-		setOrder((current) => withWatchedState(current, movie, watched));
+		setOrder(selectedId, (current) =>
+			withWatchedState(current, movie, watched),
+		);
 
 		try {
 			await moviesApi.update(movie.id, { watched });
@@ -104,7 +100,9 @@ export const useRewatchPlan = () => {
 					item.id === movie.id ? { ...item, watched: movie.watched } : item,
 				),
 			);
-			setOrder((current) => withWatchedState(current, movie, movie.watched));
+			setOrder(selectedId, (current) =>
+				withWatchedState(current, movie, movie.watched),
+			);
 			toast.error("Could not update watched status", {
 				description: getErrorMessage(error),
 			});
