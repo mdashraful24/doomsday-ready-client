@@ -59,8 +59,9 @@ export const CinemaEditDialog = ({
 	onSave,
 	onClose,
 }: CinemaEditDialogProps) => {
+	const initialBundleSizes = cinema.bundleSizes.join(", ");
 	const [name, setName] = useState(cinema.name);
-	const [bundleSizes, setBundleSizes] = useState(cinema.bundleSizes.join(", "));
+	const [bundleSizes, setBundleSizes] = useState(initialBundleSizes);
 	const [image, setImage] = useState<File>();
 	const [error, setError] = useState("");
 	const nameRef = useRef<HTMLInputElement>(null);
@@ -85,6 +86,15 @@ export const CinemaEditDialog = ({
 			document.body.style.overflow = previousOverflow;
 		};
 	}, []);
+
+	const isDirty =
+		name.trim() !== cinema.name ||
+		bundleSizes
+			.split(",")
+			.map((part) => part.trim())
+			.filter(Boolean)
+			.join(", ") !== initialBundleSizes ||
+		Boolean(image);
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -172,22 +182,29 @@ export const CinemaEditDialog = ({
 						</span>
 					</label>
 
-					<div className="mt-2 flex justify-end gap-2">
-						<button
-							type="button"
-							className={secondaryButtonClass}
-							disabled={saving}
-							onClick={onClose}
-						>
-							Cancel
-						</button>
-						<button
-							type="submit"
-							className={primaryButtonClass}
-							disabled={saving}
-						>
-							{saving ? "Saving..." : "Save changes"}
-						</button>
+					<div className="mt-2 grid gap-2">
+						{/* {!isDirty && (
+							<p className={`${fieldHintClass} text-right`}>
+								No changes to save.
+							</p>
+						)} */}
+						<div className="flex justify-end gap-2">
+							<button
+								type="button"
+								className={secondaryButtonClass}
+								disabled={saving}
+								onClick={onClose}
+							>
+								Cancel
+							</button>
+							<button
+								type="submit"
+								className={primaryButtonClass}
+								disabled={saving || !isDirty}
+							>
+								{saving ? "Saving..." : "Save changes"}
+							</button>
+						</div>
 					</div>
 				</form>
 			</div>

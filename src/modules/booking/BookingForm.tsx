@@ -97,6 +97,7 @@ export const BookingForm = ({
 								className={inputClass}
 								value={groupSize}
 								onChange={(event) => onGroupSizeChange(event.target.value)}
+								placeholder="Enter group size"
 							/>
 						</Field>
 					</div>
