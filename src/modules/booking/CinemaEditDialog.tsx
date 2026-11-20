@@ -61,7 +61,7 @@ export const CinemaEditDialog = ({
 	const initialBundleSizes = cinema.bundleSizes.join(", ");
 	const [name, setName] = useState(cinema.name);
 	const [bundleSizes, setBundleSizes] = useState(initialBundleSizes);
-	const [image, setImage] = useState<File>();
+	// const [image, setImage] = useState<File>();
 	const nameRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
@@ -97,8 +97,8 @@ export const CinemaEditDialog = ({
 			.split(",")
 			.map((part) => part.trim())
 			.filter(Boolean)
-			.join(", ") !== initialBundleSizes ||
-		Boolean(image);
+			.join(", ") !== initialBundleSizes;
+	// || Boolean(image);
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -108,7 +108,7 @@ export const CinemaEditDialog = ({
 		const saved = await onSave(cinema.id, {
 			name: trimmedName,
 			bundleSizes: bundleResult.sizes,
-			...(image ? { image } : {}),
+			// ...(image ? { image } : {}),
 		});
 
 		if (saved) onClose();
@@ -157,7 +157,7 @@ export const CinemaEditDialog = ({
 						</span>
 					</label>
 
-					<label className={labelClass}>
+					{/* <label className={labelClass}>
 						<span className={fieldLabelClass}>Replacement image</span>
 						<input
 							type="file"
@@ -168,7 +168,7 @@ export const CinemaEditDialog = ({
 						<span className={fieldHintClass}>
 							Optional. Leave empty to keep the current image.
 						</span>
-					</label>
+					</label> */}
 
 					<div className="mt-2 flex justify-end gap-2">
 						<button
