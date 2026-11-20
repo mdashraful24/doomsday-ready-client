@@ -186,6 +186,11 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
 					setLoadedOrders((current) => ({ ...current, [id]: true }));
 				})
 				.catch((error) => {
+					loadedOrdersRef.current = {
+						...loadedOrdersRef.current,
+						[id]: true,
+					};
+					setLoadedOrders((current) => ({ ...current, [id]: true }));
 					toast.error("Could not load rewatch order", {
 						description: getErrorMessage(error),
 					});

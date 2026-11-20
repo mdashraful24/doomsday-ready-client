@@ -45,19 +45,6 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
 	return readResponse<T>(response);
 };
 
-const requestFormData = async <T>(
-	path: string,
-	formData: FormData,
-	init?: RequestInit,
-): Promise<T> => {
-	const response = await fetch(`${baseUrl}${path}`, {
-		...init,
-		body: formData,
-	});
-
-	return readResponse<T>(response);
-};
-
 export const getErrorMessage = (error: unknown) =>
 	error instanceof Error ? error.message : "Something went wrong.";
 
@@ -83,29 +70,11 @@ export const moviesApi = {
 
 export const cinemasApi = {
 	list: () => request<Cinema[]>("/cinemas"),
-	update: (id: string, payload: UpdateCinemaPayload) => {
-		const formData = new FormData();
-
-		if (payload.name !== undefined) {
-			formData.append("name", payload.name);
-		}
-
-		if (payload.bundleSizes !== undefined) {
-			formData.append("bundleSizes", payload.bundleSizes.join(","));
-		}
-
-		if (payload.image) {
-			formData.append("image", payload.image);
-		}
-
-		return requestFormData<Cinema>(
-			`/cinemas/${encodeURIComponent(id)}`,
-			formData,
-			{
-				method: "PATCH",
-			},
-		);
-	},
+	update: (id: string, payload: UpdateCinemaPayload) =>
+		request<Cinema>(`/cinemas/${encodeURIComponent(id)}`, {
+			method: "PATCH",
+			body: JSON.stringify(payload),
+		}),
 	remove: (id: string) =>
 		request<{ id: string }>(`/cinemas/${encodeURIComponent(id)}`, {
 			method: "DELETE",

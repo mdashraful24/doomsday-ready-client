@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { getErrorMessage, moviesApi } from "../../api";
+import { useConfirm } from "../../hooks/useConfirm";
 import type { CreateMoviePayload, Movie } from "../../types";
 import { useAppData } from "../../providers/AppDataProvider";
 import { emptyMovieForm, type MovieFormValues } from "./types";
@@ -14,6 +15,7 @@ const toMoviePayload = (form: MovieFormValues): CreateMoviePayload => ({
 });
 
 export const useMovies = () => {
+	const confirm = useConfirm();
 	const { movies, loadingMovies, loadedMovies, loadMovies, setMovies } =
 		useAppData();
 	const [form, setForm] = useState<MovieFormValues>(emptyMovieForm);
@@ -103,6 +105,14 @@ export const useMovies = () => {
 	};
 
 	const removeMovie = async (movie: Movie) => {
+		const accepted = await confirm({
+			title: "Delete this movie?",
+			description: `"${movie.title}" will be permanently removed from the library and its prerequisite links.`,
+			confirmLabel: "Delete movie",
+		});
+
+		if (!accepted) return;
+
 		setDeletingId(movie.id);
 
 		try {

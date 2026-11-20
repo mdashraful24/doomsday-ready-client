@@ -61,7 +61,6 @@ export const CinemaEditDialog = ({
 	const initialBundleSizes = cinema.bundleSizes.join(", ");
 	const [name, setName] = useState(cinema.name);
 	const [bundleSizes, setBundleSizes] = useState(initialBundleSizes);
-	// const [image, setImage] = useState<File>();
 	const nameRef = useRef<HTMLInputElement>(null);
 
 	useEffect(() => {
@@ -98,7 +97,6 @@ export const CinemaEditDialog = ({
 			.map((part) => part.trim())
 			.filter(Boolean)
 			.join(", ") !== initialBundleSizes;
-	// || Boolean(image);
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -108,7 +106,6 @@ export const CinemaEditDialog = ({
 		const saved = await onSave(cinema.id, {
 			name: trimmedName,
 			bundleSizes: bundleResult.sizes,
-			// ...(image ? { image } : {}),
 		});
 
 		if (saved) onClose();
@@ -156,19 +153,6 @@ export const CinemaEditDialog = ({
 							Comma-separated whole numbers between 1 and 500.
 						</span>
 					</label>
-
-					{/* <label className={labelClass}>
-						<span className={fieldLabelClass}>Replacement image</span>
-						<input
-							type="file"
-							accept="image/jpeg,image/png,image/webp,image/gif"
-							className={inputClass}
-							onChange={(event) => setImage(event.target.files?.[0])}
-						/>
-						<span className={fieldHintClass}>
-							Optional. Leave empty to keep the current image.
-						</span>
-					</label> */}
 
 					<div className="mt-2 flex justify-end gap-2">
 						<button

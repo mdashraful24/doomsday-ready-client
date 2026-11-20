@@ -166,7 +166,7 @@ export const AppShell = () => {
 
 			<footer className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 pb-8 text-xs text-slate-500 sm:flex-row sm:px-6 lg:px-8">
 				<p>CineQuest · Plan the path, then own the premiere.</p>
-				<p>&copy; 2023 CineQuest. All rights reserved.</p>
+				<p>&copy; {new Date().getFullYear()} CineQuest. All rights reserved.</p>
 			</footer>
 			<Toaster />
 		</div>

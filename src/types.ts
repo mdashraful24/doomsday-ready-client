@@ -40,7 +40,6 @@ export type RewatchOrder = {
 export type Cinema = {
 	id: string;
 	name: string;
-	imageUrl: string | null;
 	createdAt: string;
 	updatedAt: string;
 	bundleSizes: number[];
@@ -49,7 +48,6 @@ export type Cinema = {
 export type UpdateCinemaPayload = {
 	name?: string;
 	bundleSizes?: number[];
-	image?: File;
 };
 
 export type BundleSelection = {
