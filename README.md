@@ -1,5 +1,7 @@
 # Doomsday Ready Client
 
+This repository contains the React/Vite client. The REST API, database migrations, seed data, and core algorithms are maintained in the separate Doomsday Ready server repository.
+
 <div align="center">
   <img height="500" src="https://drive.google.com/uc?export=view&id=1qcu_0ZqiJ6hrQkBwIcxP_9jvjtwcfjJd" alt="Doomsday Ready" />
 </div>
@@ -10,7 +12,7 @@ Doomsday Ready is a movie rewatch planning and cinema booking platform. It helps
 
 The product flow is: build the movie library, choose a target film, follow the computed rewatch path, then use the booking view to plan the premiere with the minimum number of cinema bundles.
 
-This repository contains the React/Vite client application. It communicates with the Doomsday Ready REST API for movies, cinemas, rewatch orders, quotes, and bookings. A shared top-level data cache keeps data available between routes, while background refresh keeps the UI current after create, update, cancel, and delete actions.
+This repository contains the React/Vite client application. It communicates with the Doomsday Ready REST API for movies, cinemas, rewatch orders, quotes, and bookings. A shared top-level data cache keeps data available between routes, and mutations update local state optimistically with rollback; cinema edits trigger a silent refresh.
 
 ## Table of Contents
 
@@ -27,6 +29,7 @@ This repository contains the React/Vite client application. It communicates with
 - [API Integration](#api-integration)
 - [Deployment](#deployment)
 - [Data Model](#data-model)
+- [AI Tool Usage](#ai-tool-usage)
 - [Relevant Links](#relevant-links)
 
 ## Tech Stack
@@ -84,7 +87,6 @@ Prerequisites:
 
 - Bun installed locally.
 - The Doomsday Ready server running locally, or a reachable deployed API.
-- Optional: Docker if you want to run the full stack from the workspace root.
 
 ```bash
 bun install
@@ -101,14 +103,6 @@ bun run dev
 ```
 
 The client runs at `http://localhost:3000`.
-
-To run the full stack with the workspace Docker Compose file, start Docker from the workspace root containing both `doomsday-ready-client` and `doomsday-ready-server`:
-
-```bash
-docker compose up --build
-```
-
-That setup starts PostgreSQL, the API at `http://localhost:5000/api`, and the client at `http://localhost:3000`.
 
 ## Environment Variables
 
@@ -130,7 +124,7 @@ For the deployed client, set the same variable to the production API URL:
 VITE_API_BASE_URL=https://doomsday-ready-server-inky.vercel.app/api
 ```
 
-Do not commit real environment files. Only `.env.example` should be tracked.
+Vite inlines `VITE_*` values at build time, so rebuild after changing this variable. Do not commit real environment files; only `.env.example` should be tracked.
 
 ## Available Scripts
 
@@ -238,7 +232,7 @@ Movie and cinema management follow a separate administrative flow: create, updat
 - `src/api.ts` wraps all `fetch` calls, adds JSON headers, parses the success envelope, and throws readable errors for toasts.
 - Successful API responses follow `{ success, statusCode, message, data, meta? }`.
 - Errors are displayed through Sonner using the server `message` field.
-- Movie and cinema data is cached in `AppDataProvider` and refreshed in the background after mutations.
+- Movie and cinema data is cached in `AppDataProvider`; mutations update local state optimistically, and cinema edits perform a silent refresh.
 
 Client integration map:
 
@@ -308,6 +302,10 @@ erDiagram
     string status
   }
 ```
+
+## AI Tool Usage
+
+As required by the assessment brief, AI tools were used in this repository for source analysis, requirements checking, documentation drafting/review, and verification guidance only. The tool was the `opencode` CLI with model `opencode/big-pickle` on 2026-11-20. No AI-generated dependency or runtime AI service was added. The Feature 1 and Feature 2 algorithms are hand-written in the separate server repository. See [AI_USAGE.md](./AI_USAGE.md) for the detailed record.
 
 ## Relevant Links
 
