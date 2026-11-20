@@ -233,3 +233,18 @@ export const CloseIcon = ({
 		<path d="M6 6l12 12M18 6 6 18" />
 	</svg>
 );
+
+export const MenuIcon = ({
+	className = iconBase,
+	title = "Menu",
+}: IconProps) => (
+	<svg
+		className={className}
+		viewBox="0 0 24 24"
+		aria-label={title}
+		{...iconAttributes}
+	>
+		<title>{title}</title>
+		<path d="M4 7h16M4 12h16M4 17h16" />
+	</svg>
+);

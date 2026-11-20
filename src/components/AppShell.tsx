@@ -1,7 +1,15 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { FilmIcon, RouteIcon, SparkIcon, TicketIcon } from "./Icons";
+import {
+	CloseIcon,
+	FilmIcon,
+	MenuIcon,
+	RouteIcon,
+	SparkIcon,
+	TicketIcon,
+} from "./Icons";
 import { Toaster } from "./Toaster";
-import { eyebrowClass } from "../ui";
+import { eyebrowClass, iconButtonClass } from "../ui";
 
 const navigation = [
 	{ to: "/movies", label: "Movies", icon: FilmIcon },
@@ -9,7 +17,34 @@ const navigation = [
 	{ to: "/booking", label: "Booking", icon: TicketIcon },
 ];
 
+const desktopNavClass = ({ isActive }: { isActive: boolean }) =>
+	`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold tracking-wide uppercase transition duration-200 ${
+		isActive
+			? "border-indigo-300/30 bg-indigo-400/15 text-indigo-100 shadow-lg shadow-indigo-500/10"
+			: "border-transparent text-slate-400 hover:border-white/10 hover:bg-white/5 hover:text-white"
+	}`;
+
+const mobileNavClass = ({ isActive }: { isActive: boolean }) =>
+	`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-bold transition duration-200 ${
+		isActive
+			? "border-indigo-300/30 bg-indigo-400/15 text-indigo-100 shadow-lg shadow-indigo-500/10"
+			: "border-transparent text-slate-400 hover:border-white/10 hover:bg-white/5 hover:text-white"
+	}`;
+
 export const AppShell = () => {
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	useEffect(() => {
+		if (!menuOpen) return;
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") setMenuOpen(false);
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [menuOpen]);
+
 	return (
 		<div className="relative min-h-screen overflow-x-clip">
 			<div className="texture-grid pointer-events-none fixed inset-0 opacity-70" />
@@ -18,43 +53,75 @@ export const AppShell = () => {
 			<div className="animate-float-slow pointer-events-none fixed -left-40 top-2/3 size-80 rounded-full bg-violet-500/10 blur-3xl" />
 
 			<header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
-				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-					<Link className="group flex items-center gap-3" to="/movies">
-						<span className="grid size-11 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-400 to-fuchsia-400 text-slate-950 shadow-lg shadow-indigo-500/25 transition duration-200 group-hover:-translate-y-0.5">
-							<FilmIcon className="size-6" title="CineQuest" />
+				<div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+					<Link
+						className="group flex min-w-0 items-center gap-2.5 sm:gap-3"
+						to="/movies"
+					>
+						<span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-400 to-fuchsia-400 text-slate-950 shadow-lg shadow-indigo-500/25 transition duration-200 group-hover:-translate-y-0.5 sm:size-11">
+							<FilmIcon className="size-5 sm:size-6" title="CineQuest" />
 						</span>
-						<span>
-							<span className="block text-md font-black tracking-[0.24em] text-white uppercase">
+						<span className="min-w-0">
+							<span className="block truncate text-xs font-black tracking-[0.18em] text-white uppercase sm:text-md sm:tracking-[0.24em]">
 								CineQuest
 							</span>
-							<span className="block text-sm text-slate-400">
+							<span className="hidden truncate text-sm text-slate-400 sm:block">
 								Your movie marathon command center
 							</span>
 						</span>
 					</Link>
-					<nav className="flex flex-wrap items-center gap-2">
+
+					<nav
+						aria-label="Primary navigation"
+						className="hidden items-center gap-2 sm:flex"
+					>
 						{navigation.map(({ to, label, icon: Icon }) => (
-							<NavLink
-								className={({ isActive }) =>
-									`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold tracking-wide transition duration-200 uppercase ${
-										isActive
-											? "border-indigo-300/30 bg-indigo-400/15 text-indigo-100 shadow-lg shadow-indigo-500/10"
-											: "border-transparent text-slate-400 hover:border-white/10 hover:bg-white/5 hover:text-white"
-									}`
-								}
-								key={to}
-								to={to}
-							>
+							<NavLink className={desktopNavClass} key={to} to={to}>
 								<Icon className="size-4" title={label} />
 								{label}
 							</NavLink>
 						))}
 					</nav>
+
+					<button
+						aria-expanded={menuOpen}
+						aria-label={menuOpen ? "Close menu" : "Open menu"}
+						className={`${iconButtonClass} sm:hidden`}
+						onClick={() => setMenuOpen((open) => !open)}
+						type="button"
+					>
+						{menuOpen ? (
+							<CloseIcon className="size-5" />
+						) : (
+							<MenuIcon className="size-5" />
+						)}
+					</button>
 				</div>
+
+				{menuOpen && (
+					<nav
+						aria-label="Mobile navigation"
+						className="animate-dropdown border-t border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur-xl sm:hidden"
+					>
+						<div className="mx-auto grid max-w-7xl gap-2">
+							{navigation.map(({ to, label, icon: Icon }) => (
+								<NavLink
+									className={mobileNavClass}
+									key={to}
+									onClick={() => setMenuOpen(false)}
+									to={to}
+								>
+									<Icon className="size-4" title={label} />
+									{label}
+								</NavLink>
+							))}
+						</div>
+					</nav>
+				)}
 			</header>
 
-			<main className="relative z-10 mx-auto max-w-7xl px-4 pt-10 pb-16 sm:px-6 sm:pt-14 lg:px-8">
-				<section className="mb-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+			<main className="relative z-10 mx-auto max-w-7xl px-4 pt-8 pb-10 md:pb-16 sm:px-6 sm:pt-14 lg:px-8">
+				<section className="mb-8 grid gap-5 lg:mb-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
 					<div className="max-w-2xl">
 						<div className="mb-3 flex items-center gap-2">
 							<SparkIcon className="size-4 text-fuchsia-300" title="Featured" />
@@ -97,7 +164,7 @@ export const AppShell = () => {
 				<Outlet />
 			</main>
 
-			<footer className="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4 px-4 pb-8 text-xs text-slate-500 sm:px-6 lg:px-8">
+			<footer className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 pb-8 text-xs text-slate-500 sm:flex-row sm:px-6 lg:px-8">
 				<p>CineQuest · Plan the path, then own the premiere.</p>
 				<p>&copy; 2023 CineQuest. All rights reserved.</p>
 			</footer>
