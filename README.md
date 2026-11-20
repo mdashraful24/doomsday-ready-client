@@ -127,7 +127,7 @@ VITE_API_BASE_URL=http://localhost:5000/api
 For the deployed client, set the same variable to the production API URL:
 
 ```env
-VITE_API_BASE_URL=https://doomsday-ready-server.vercel.app/api
+VITE_API_BASE_URL=https://doomsday-ready-server-inky.vercel.app/api
 ```
 
 Do not commit real environment files. Only `.env.example` should be tracked.
