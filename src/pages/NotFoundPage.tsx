@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRightIcon, SparkIcon } from "../components/Icons";
+import { usePageTitle } from "../hooks/usePageTitle";
 import {
 	cardClass,
 	cardGlowClass,
@@ -11,6 +12,8 @@ import {
 } from "../ui";
 
 const NotFoundPage = () => {
+	usePageTitle("Page Not Found");
+
 	const location = useLocation();
 
 	return (

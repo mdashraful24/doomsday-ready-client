@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "../components/Icons";
+import { usePageTitle } from "../hooks/usePageTitle";
 import { BookingList } from "../modules/booking/BookingList";
 import { useBooking } from "../modules/booking/useBooking";
 import { secondaryButtonClass } from "../ui";
 
 const BookingsPage = () => {
+	usePageTitle("Booking List");
+
 	const { bookings, loading, busyId, cancelBooking, deleteBooking } =
 		useBooking();
 

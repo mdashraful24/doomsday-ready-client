@@ -98,14 +98,14 @@ const AppShell = () => {
 			<header className="sticky top-0 z-20 border-b border-white/5 bg-slate-950/60 backdrop-blur-xl">
 				<div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
 					<div className="flex items-center gap-3">
-						<div className="grid size-10 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-500 to-fuchsia-500 text-slate-950 shadow-lg shadow-indigo-500/25">
-							<FilmIcon className="size-5" />
+						<div className="grid size-12 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-500 to-fuchsia-500 text-slate-950 shadow-lg shadow-indigo-500/25">
+							<FilmIcon className="size-8" />
 						</div>
 						<div>
-							<p className="text-sm font-bold tracking-[0.16em] text-white">
+							<p className="text-lg font-bold tracking-[0.16em] text-white">
 								CINEQUEST
 							</p>
-							<p className="text-xs text-slate-500">
+							<p className="text-sm text-slate-300">
 								Plan Your Rewatch. Book Your Premiere.
 							</p>
 						</div>
@@ -201,8 +201,9 @@ const AppShell = () => {
 				</Routes>
 			</main>
 
-			<footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-slate-600 sm:px-6 lg:px-8">
-				CineQuest · Plan the path, then own the premiere.
+			<footer className="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4 px-4 pb-8 text-xs text-slate-500 sm:px-6 lg:px-8">
+				<p>CineQuest · Plan the path, then own the premiere.</p>
+				<p>&copy; 2023 CineQuest. All rights reserved.</p>
 			</footer>
 			<Toaster />
 		</div>

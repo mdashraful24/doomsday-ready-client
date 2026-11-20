@@ -83,7 +83,7 @@ export const dividerClass =
 export const skeletonClass = "animate-pulse rounded-lg bg-white/10";
 
 export const dropdownPanelClass =
-	"animate-dropdown absolute z-50 mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-xl";
+	"animate-dropdown absolute z-50 w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-xl";
 
 export const dropdownOptionClass =
 	"flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-slate-300 transition duration-150 hover:bg-white/10 hover:text-white focus:bg-white/10 focus:text-white focus:outline-none";

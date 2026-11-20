@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useDropdownPlacement } from "../hooks/useDropdownPlacement";
 import { useScrollbarHidden } from "../hooks/useScrollbarHidden";
 import { dropdownOptionClass, dropdownPanelClass, inputClass } from "../ui";
 import { CheckIcon, ChevronDownIcon } from "./Icons";
@@ -33,6 +34,7 @@ export const Select = <T extends string>({
 	const selected = options.find((option) => option.value === value);
 
 	useScrollbarHidden(open);
+	const { placement, maxHeight } = useDropdownPlacement(open, rootRef, 288);
 
 	useEffect(() => {
 		if (!open) return;
@@ -81,9 +83,15 @@ export const Select = <T extends string>({
 				<div
 					id={id ? `${id}-listbox` : undefined}
 					role="listbox"
-					className={dropdownPanelClass}
+					className={`${dropdownPanelClass} ${
+						placement === "top" ? "bottom-full mb-2" : "top-full mt-2"
+					}`}
+					style={{ maxHeight }}
 				>
-					<div className="scrollbar-none max-h-64 overflow-y-auto">
+					<div
+						className="scrollbar-none overflow-y-auto"
+						style={{ maxHeight: Math.max(80, maxHeight - 16) }}
+					>
 						{options.length === 0 ? (
 							<p className="px-3 py-4 text-sm text-slate-500">{emptyMessage}</p>
 						) : (

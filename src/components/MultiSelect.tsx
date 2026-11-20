@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useDropdownPlacement } from "../hooks/useDropdownPlacement";
 import { useScrollbarHidden } from "../hooks/useScrollbarHidden";
 import {
 	chipClass,
@@ -35,6 +36,7 @@ export const MultiSelect = ({
 	const searchRef = useRef<HTMLInputElement>(null);
 
 	useScrollbarHidden(open);
+	const { placement, maxHeight } = useDropdownPlacement(open, rootRef, 320);
 
 	const selected = useMemo(
 		() => options.filter((option) => value.includes(option.value)),
@@ -123,7 +125,10 @@ export const MultiSelect = ({
 					id={id ? `${id}-listbox` : undefined}
 					role="listbox"
 					aria-multiselectable="true"
-					className={dropdownPanelClass}
+					className={`${dropdownPanelClass} ${
+						placement === "top" ? "bottom-full mb-2" : "top-full mt-2"
+					}`}
+					style={{ maxHeight }}
 				>
 					<div className="flex items-center gap-2 px-1 pb-2 pt-1">
 						<div className="relative flex-1">
@@ -148,7 +153,10 @@ export const MultiSelect = ({
 						</button>
 					</div>
 
-					<div className="scrollbar-none max-h-60 overflow-y-auto">
+					<div
+						className="scrollbar-none overflow-y-auto"
+						style={{ maxHeight: Math.max(80, maxHeight - 72) }}
+					>
 						{filtered.length === 0 ? (
 							<p className="px-3 py-4 text-sm text-slate-500">{emptyMessage}</p>
 						) : (
