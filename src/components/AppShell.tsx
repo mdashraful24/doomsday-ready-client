@@ -63,11 +63,11 @@ export const AppShell = () => {
 							<FilmIcon className="size-5 sm:size-6" title="Doomsday Ready" />
 						</span>
 						<span className="min-w-0">
-							<span className="block truncate text-xs font-black tracking-[0.18em] text-white uppercase sm:text-md sm:tracking-[0.24em]">
+							<span className="block truncate text-sm font-black tracking-[0.18em] text-white uppercase sm:text-md sm:tracking-[0.24em]">
 								Doomsday Ready
 							</span>
 							<span className="hidden truncate text-sm text-slate-400 sm:block">
-								Your movie marathon command center
+								Plan the path, then own the premiere.
 							</span>
 						</span>
 					</Link>

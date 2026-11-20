@@ -258,6 +258,7 @@ Detailed backend contracts are documented in `API_INTEGRATION.md` in the `doomsd
 - Required environment variable: `VITE_API_BASE_URL` pointing to the deployed API.
 - `vercel.json` configures SPA fallback by rewriting all routes to `/index.html`.
 - Production URL: https://doomsday-ready-client.vercel.app
+- API URL: https://doomsday-ready-server-inky.vercel.app
 
 Before deploying, run the local verification commands:
 
@@ -314,7 +315,8 @@ erDiagram
 
 - Live client: https://doomsday-ready-client.vercel.app
 - Live API: https://doomsday-ready-server.vercel.app/api
-- Postman collection: https://documenter.getpostman.com/view/59636503/2sBYHbtcid
+- Deployed API: https://doomsday-ready-server-inky.vercel.app
+- Postman collection: https://documenter.getpostman.com/view/59636503/2sBYPv2XTa
 - Client repository: https://github.com/mdashraful24/doomsday-ready-client.git
 - Server repository: https://github.com/mdashraful24/doomsday-ready-server.git
 - Backend integration guide: `API_INTEGRATION.md` in the server repository
