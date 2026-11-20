@@ -1,16 +1,16 @@
-# CineQuest Client
+# Doomsday Ready Client
 
 <div align="center">
-  <img height="500" src="https://drive.google.com/uc?export=view&id=1qcu_0ZqiJ6hrQkBwIcxP_9jvjtwcfjJd" alt="CineQuest" />
+  <img height="500" src="https://drive.google.com/uc?export=view&id=1qcu_0ZqiJ6hrQkBwIcxP_9jvjtwcfjJd" alt="Doomsday Ready" />
 </div>
 
 ## Overview
 
-CineQuest is a movie rewatch planning and cinema booking platform. It helps movie fans build a valid rewatch order from prerequisite links, track watched progress, calculate the fewest exact cinema bundles for a group, and manage opening-night bookings.
+Doomsday Ready is a movie rewatch planning and cinema booking platform. It helps movie fans build a valid rewatch order from prerequisite links, track watched progress, calculate the fewest exact cinema bundles for a group, and manage opening-night bookings.
 
 The product flow is: build the movie library, choose a target film, follow the computed rewatch path, then use the booking view to plan the premiere with the minimum number of cinema bundles.
 
-This repository contains the React/Vite client application. It communicates with the CineQuest REST API for movies, cinemas, rewatch orders, quotes, and bookings. A shared top-level data cache keeps data available between routes, while background refresh keeps the UI current after create, update, cancel, and delete actions.
+This repository contains the React/Vite client application. It communicates with the Doomsday Ready REST API for movies, cinemas, rewatch orders, quotes, and bookings. A shared top-level data cache keeps data available between routes, while background refresh keeps the UI current after create, update, cancel, and delete actions.
 
 ## Table of Contents
 
@@ -83,7 +83,7 @@ This repository contains the React/Vite client application. It communicates with
 Prerequisites:
 
 - Bun installed locally.
-- The CineQuest server running locally, or a reachable deployed API.
+- The Doomsday Ready server running locally, or a reachable deployed API.
 - Optional: Docker if you want to run the full stack from the workspace root.
 
 ```bash
@@ -102,7 +102,7 @@ bun run dev
 
 The client runs at `http://localhost:3000`.
 
-To run the full stack with the workspace Docker Compose file, start Docker from the workspace root containing both `cine-quest-client` and `cine-quest-server`:
+To run the full stack with the workspace Docker Compose file, start Docker from the workspace root containing both `doomsday-ready-client` and `doomsday-ready-server`:
 
 ```bash
 docker compose up --build
@@ -116,7 +116,7 @@ Environment variables are defined in `.env.example` and copied to `.env` for loc
 
 | Variable | Required | Description | Example |
 |---|---|---|---|
-| `VITE_API_BASE_URL` | Yes | Base URL for the CineQuest API | `http://localhost:5000/api` |
+| `VITE_API_BASE_URL` | Yes | Base URL for the Doomsday Ready API | `http://localhost:5000/api` |
 
 Example `.env`:
 
@@ -127,7 +127,7 @@ VITE_API_BASE_URL=http://localhost:5000/api
 For the deployed client, set the same variable to the production API URL:
 
 ```env
-VITE_API_BASE_URL=https://cine-quest-server.vercel.app/api
+VITE_API_BASE_URL=https://doomsday-ready-server.vercel.app/api
 ```
 
 Do not commit real environment files. Only `.env.example` should be tracked.
@@ -148,7 +148,7 @@ Do not commit real environment files. Only `.env.example` should be tracked.
 ## Project Structure
 
 ```text
-cine-quest-client/
+doomsday-ready-client/
 ├── public/
 ├── src/
 │   ├── components/
@@ -211,7 +211,7 @@ If extended, a typical role model would be:
 
 ## Work Order Lifecycle
 
-CineQuest does not have a separate work-order module. The closest operational workflow is the booking lifecycle.
+Doomsday Ready does not have a separate work-order module. The closest operational workflow is the booking lifecycle.
 
 1. **Select** a cinema and enter a group size on `/booking`.
 2. **Quote** the group with `GET /api/cinemas/:id/booking?groupSize=N`.
@@ -225,9 +225,9 @@ Movie and cinema management follow a separate administrative flow: create, updat
 
 ## Metadata & SEO
 
-- `index.html` sets `lang="en"`, charset, responsive viewport, theme color `#070b18`, meta description, and the default title `CineQuest | Movies`.
+- `index.html` sets `lang="en"`, charset, responsive viewport, theme color `#070b18`, meta description, and the default title `Doomsday Ready | Movies`.
 - `public/favicon.svg` provides a branded film-strip icon.
-- `src/hooks/usePageTitle.ts` sets a page-specific document title such as `Rewatch Plan | CineQuest`.
+- `src/hooks/usePageTitle.ts` sets a page-specific document title such as `Rewatch Plan | Doomsday Ready`.
 - Titles are applied on the Movies, Rewatch Plan, Booking, Booking List, and Not Found pages.
 - React Helmet is intentionally not used; the lightweight hook keeps the bundle smaller.
 - `vercel.json` rewrites all paths to `/index.html`, so direct navigation to client routes works after deployment.
@@ -248,7 +248,7 @@ Client integration map:
 | Cinemas | `list`, `update`, `remove`, `getBookingQuote`, `createBooking` |
 | Bookings | `list`, `cancel`, `remove` |
 
-Detailed backend contracts are documented in `API_INTEGRATION.md` in the `cine-quest-server` repository. The published Postman collection is listed under Relevant Links.
+Detailed backend contracts are documented in `API_INTEGRATION.md` in the `doomsday-ready-server` repository. The published Postman collection is listed under Relevant Links.
 
 ## Deployment
 
@@ -257,7 +257,7 @@ Detailed backend contracts are documented in `API_INTEGRATION.md` in the `cine-q
 - Build output: `dist`.
 - Required environment variable: `VITE_API_BASE_URL` pointing to the deployed API.
 - `vercel.json` configures SPA fallback by rewriting all routes to `/index.html`.
-- Production URL: https://cine-quest-client.vercel.app
+- Production URL: https://doomsday-ready-client.vercel.app
 
 Before deploying, run the local verification commands:
 
@@ -312,9 +312,9 @@ erDiagram
 
 ## Relevant Links
 
-- Live client: https://cine-quest-client.vercel.app
-- Live API: https://cine-quest-server.vercel.app/api
+- Live client: https://doomsday-ready-client.vercel.app
+- Live API: https://doomsday-ready-server.vercel.app/api
 - Postman collection: https://documenter.getpostman.com/view/59636503/2sBYHbtcid
-- Client repository: https://github.com/mdashraful24/cine-quest-client.git
-- Server repository: https://github.com/mdashraful24/cine-quest-server.git
+- Client repository: https://github.com/mdashraful24/doomsday-ready-client.git
+- Server repository: https://github.com/mdashraful24/doomsday-ready-server.git
 - Backend integration guide: `API_INTEGRATION.md` in the server repository

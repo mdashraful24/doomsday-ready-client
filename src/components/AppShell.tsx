@@ -60,11 +60,11 @@ export const AppShell = () => {
 						to="/movies"
 					>
 						<span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-linear-to-br from-indigo-400 via-violet-400 to-fuchsia-400 text-slate-950 shadow-lg shadow-indigo-500/25 transition duration-200 group-hover:-translate-y-0.5 sm:size-11">
-							<FilmIcon className="size-5 sm:size-6" title="CineQuest" />
+							<FilmIcon className="size-5 sm:size-6" title="Doomsday Ready" />
 						</span>
 						<span className="min-w-0">
 							<span className="block truncate text-xs font-black tracking-[0.18em] text-white uppercase sm:text-md sm:tracking-[0.24em]">
-								CineQuest
+								Doomsday Ready
 							</span>
 							<span className="hidden truncate text-sm text-slate-400 sm:block">
 								Your movie marathon command center
@@ -177,8 +177,8 @@ export const AppShell = () => {
 			</main>
 
 			<footer className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 pb-8 text-xs text-slate-400 sm:flex-row sm:px-6 lg:px-8">
-				<p>CineQuest · Plan the path, then own the premiere.</p>
-				<p>&copy; {new Date().getFullYear()} CineQuest. All rights reserved.</p>
+				<p>Doomsday Ready · Plan the path, then own the premiere.</p>
+				<p>&copy; {new Date().getFullYear()} Doomsday Ready. All rights reserved.</p>
 			</footer>
 			<Toaster />
 		</div>

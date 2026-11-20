@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "cine-quest-client",
+      "name": "doomsday-ready-client",
       "dependencies": {
         "lucide-react": "^1.77.0",
         "react": "^19.2.0",

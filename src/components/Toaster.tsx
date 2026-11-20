@@ -5,7 +5,7 @@ export const Toaster = () => (
 		theme="dark"
 		position="top-right"
 		richColors
-		closeButton
+		// closeButton
 		toastOptions={{
 			style: {
 				background: "rgba(2, 6, 23, 0.95)",

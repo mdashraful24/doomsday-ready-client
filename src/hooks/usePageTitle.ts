@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const appName = "CineQuest";
+const appName = "Doomsday Ready";
 
 export const usePageTitle = (page?: string) => {
 	useEffect(() => {
