@@ -60,12 +60,11 @@ export const useRewatchPlan = () => {
 	}, [movies, selectedId]);
 
 	useEffect(() => {
-		if (!selectedId) return;
+		if (!selectedId || requestedOrderIds.current.has(selectedId)) return;
 
-		const silent = requestedOrderIds.current.has(selectedId);
 		requestedOrderIds.current.add(selectedId);
-		void loadOrder(selectedId, { silent });
-	}, [selectedId, loadOrder]);
+		void loadOrder(selectedId, { silent: Boolean(loadedOrders[selectedId]) });
+	}, [selectedId, loadOrder, loadedOrders]);
 
 	const order = selectedId ? (orders[selectedId] ?? null) : null;
 	const orderLoading = Boolean(loadingOrders[selectedId]);
@@ -75,8 +74,8 @@ export const useRewatchPlan = () => {
 
 	const selectTarget = (id: string) => {
 		setSelectedId(id);
-		void loadOrder(id, { silent: requestedOrderIds.current.has(id) });
 		requestedOrderIds.current.add(id);
+		void loadOrder(id, { silent: Boolean(loadedOrders[id]) });
 	};
 
 	const toggleWatched = async (movie: OrderMovie) => {

@@ -62,12 +62,11 @@ export const useBooking = () => {
 	const targetId = getTargetMovieId(movies);
 
 	useEffect(() => {
-		if (!targetId) return;
+		if (!targetId || requestedOrderIds.current.has(targetId)) return;
 
-		const silent = requestedOrderIds.current.has(targetId);
 		requestedOrderIds.current.add(targetId);
-		void loadOrder(targetId, { silent });
-	}, [targetId, loadOrder]);
+		void loadOrder(targetId, { silent: Boolean(loadedOrders[targetId]) });
+	}, [targetId, loadOrder, loadedOrders]);
 
 	const targetOrder = targetId ? (orders[targetId] ?? null) : null;
 	const rewatchSummary: RewatchSummary | null = targetOrder

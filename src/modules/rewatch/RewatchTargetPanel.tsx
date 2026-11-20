@@ -70,7 +70,7 @@ export const RewatchTargetPanel = ({
 
 			{!loading && order && (
 				<div className="mt-5 grid gap-3">
-					<div className="relative overflow-hidden rounded-2xl border border-indigo-300/20 bg-gradient-to-br from-indigo-500/15 to-violet-500/5 p-5">
+					<div className="relative overflow-hidden rounded-2xl border border-indigo-300/20 bg-linear-to-br from-indigo-500/15 to-violet-500/5 p-5">
 						<div
 							className="pointer-events-none absolute -top-16 -right-12 size-44 rounded-full bg-indigo-400/10 blur-3xl"
 							aria-hidden="true"
@@ -92,7 +92,7 @@ export const RewatchTargetPanel = ({
 								aria-valuemax={100}
 							>
 								<div
-									className="h-full rounded-full bg-gradient-to-r from-indigo-300 via-violet-300 to-fuchsia-300 transition-[width] duration-300"
+									className="h-full rounded-full bg-linear-to-r from-indigo-300 via-violet-300 to-fuchsia-300 transition-[width] duration-300"
 									style={{ width: `${progress}%` }}
 								/>
 							</div>

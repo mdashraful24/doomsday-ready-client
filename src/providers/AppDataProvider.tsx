@@ -78,16 +78,21 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
 	const cinemaRequest = useRef<Promise<void> | null>(null);
 	const bookingRequest = useRef<Promise<void> | null>(null);
 	const orderRequests = useRef<Record<string, Promise<void> | undefined>>({});
+	const loadedMoviesRef = useRef(loadedMovies);
+	const loadedCinemasRef = useRef(loadedCinemas);
+	const loadedBookingsRef = useRef(loadedBookings);
+	const loadedOrdersRef = useRef(loadedOrders);
 
 	const loadMovies = useCallback(
 		async ({ silent = false }: LoadOptions = {}) => {
 			if (movieRequest.current) return movieRequest.current;
-			if (!silent) setLoadingMovies(true);
+			if (!silent && !loadedMoviesRef.current) setLoadingMovies(true);
 
 			const request = moviesApi
 				.list()
 				.then((data) => {
 					setMovies(data);
+					loadedMoviesRef.current = true;
 					setLoadedMovies(true);
 				})
 				.catch((error) => {
@@ -109,12 +114,13 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
 	const loadCinemas = useCallback(
 		async ({ silent = false }: LoadOptions = {}) => {
 			if (cinemaRequest.current) return cinemaRequest.current;
-			if (!silent) setLoadingCinemas(true);
+			if (!silent && !loadedCinemasRef.current) setLoadingCinemas(true);
 
 			const request = cinemasApi
 				.list()
 				.then((data) => {
 					setCinemas(data);
+					loadedCinemasRef.current = true;
 					setLoadedCinemas(true);
 				})
 				.catch((error) => {
@@ -136,12 +142,13 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
 	const loadBookings = useCallback(
 		async ({ silent = false }: LoadOptions = {}) => {
 			if (bookingRequest.current) return bookingRequest.current;
-			if (!silent) setLoadingBookings(true);
+			if (!silent && !loadedBookingsRef.current) setLoadingBookings(true);
 
 			const request = bookingsApi
 				.list()
 				.then((data) => {
 					setBookings(data);
+					loadedBookingsRef.current = true;
 					setLoadedBookings(true);
 				})
 				.catch((error) => {
@@ -164,12 +171,18 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
 		async (id: string, { silent = false }: LoadOptions = {}) => {
 			if (!id) return;
 			if (orderRequests.current[id]) return orderRequests.current[id];
-			if (!silent) setLoadingOrders((current) => ({ ...current, [id]: true }));
+			if (!silent && !loadedOrdersRef.current[id]) {
+				setLoadingOrders((current) => ({ ...current, [id]: true }));
+			}
 
 			const request = moviesApi
 				.getRewatchOrder(id)
 				.then((data) => {
 					setOrders((current) => ({ ...current, [id]: data }));
+					loadedOrdersRef.current = {
+						...loadedOrdersRef.current,
+						[id]: true,
+					};
 					setLoadedOrders((current) => ({ ...current, [id]: true }));
 				})
 				.catch((error) => {
@@ -195,6 +208,7 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
 			if (!next) return current;
 			return { ...current, [id]: next };
 		});
+		loadedOrdersRef.current = { ...loadedOrdersRef.current, [id]: true };
 		setLoadedOrders((current) => ({ ...current, [id]: true }));
 	}, []);
 
